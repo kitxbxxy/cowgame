@@ -774,7 +774,10 @@ function initGame() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initGame);
 } else {
-  initGame();
+  initGame();if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+
 }
 </script>
 
