@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Ферма 🐮"/>
+  <meta name="theme-color" content="#f4a261"/>
+  <title>🐮 Молочная Ферма</title>
+  <style>
+    :root {
+      --bg:#1a1a2e;--bg2:#16213e;--surface:#0f3460;--surface2:#1a4080;
+      --accent:#f4a261;--accent2:#e76f51;--text:#edf2f4;--text2:#adb5bd;
+      --success:#2ec4b6;--warning:#ffd166;--danger:#ef476f;
+      --border:rgba(255,255,255,0.08);--radius:16px;--radius-sm:10px;
+      --shadow:0 4px 24px rgba(0,0,0,0.4);--font:'Georgia',serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+      font-family:var(--font);-webkit-tap-highlight-color:transparent;user-select:none}
+    #app{display:flex;flex-direction:column;height:100%;height:100dvh;
+      max-width:480px;margin:0 auto;position:relative;overflow:hidden}
+    /* Header */
+    #header{background:linear-gradient(135deg,var(--surface) 0%,var(--bg2) 100%);
+      padding:12px 16px env(safe-area-inset-top);border-bottom:1px solid var(--border);flex-shrink:0}
+    .hud{display:flex;justify-content:space-around;align-items:center;gap:4px}
+    .hud-item{background:rgba(255,255,255,0.07);border:1px solid var(--border);
+      border-radius:20px;padding:5px 12px;font-size:14px;white-space:nowrap}
+    .hud-item b{color:var(--accent)}
+    .day-badge{background:linear-gradient(135deg,var(--accent2),var(--accent));
+      border:none;color:#fff;font-weight:bold}
+    .upgrade-badge{text-align:center;font-size:11px;color:var(--success);margin-top:4px}
+    /* Zone bar */
+    #zone-bar{background:var(--bg2);padding:10px 16px 6px;display:flex;
+      align-items:center;gap:8px;border-bottom:1px solid var(--border);
+      flex-shrink:0;position:relative;flex-wrap:wrap}
+    .zone-nav{background:var(--surface);border:1px solid var(--border);
+      border-radius:50%;width:36px;height:36px;color:var(--text);font-size:14px;
+      cursor:pointer;transition:background .2s;flex-shrink:0}
+    .zone-nav:active{background:var(--surface2)}
+    .zone-title{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px}
+    .zone-emoji{font-size:26px;line-height:1}
+    .zone-title span{font-size:15px;font-weight:bold}
+    .zone-title small{font-size:11px;color:var(--text2)}
+    .zone-dots{width:100%;display:flex;justify-content:center;gap:6px;padding-top:4px}
+    .zone-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);
+      transition:background .2s,transform .2s}
+    .zone-dot.active{background:var(--accent);transform:scale(1.3)}
+    /* Cow list */
+    #cow-list{flex:1;overflow-y:auto;padding:12px;display:flex;
+      flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+    .cow-card{background:linear-gradient(135deg,var(--surface) 0%,var(--bg2) 100%);
+      border:1px solid var(--border);border-radius:var(--radius);padding:14px;
+      box-shadow:var(--shadow);transition:transform .15s}
+    .cow-card:active{transform:scale(0.99)}
+    .cow-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .cow-name-btn{background:none;border:none;color:var(--accent);font-size:16px;
+      font-weight:bold;font-family:var(--font);cursor:pointer;text-align:left}
+    .action-dots{display:flex;gap:5px}
+    .action-dot{width:12px;height:12px;border-radius:50%;
+      background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.2);transition:background .2s}
+    .action-dot.active{background:var(--warning);border-color:var(--warning);box-shadow:0 0 6px var(--warning)}
+    .cow-bars{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+    .bar-row{display:flex;align-items:center;gap:6px}
+    .bar-emoji{font-size:14px;width:20px;text-align:center}
+    .bar-track{flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:4px;transition:width .3s ease}
+    .bar-val{font-size:11px;color:var(--text2);width:24px;text-align:right}
+    .cow-actions{display:flex;gap:8px}
+    /* Buttons */
+    .btn{border:none;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;
+      font-family:var(--font);cursor:pointer;transition:opacity .15s,transform .1s;
+      font-weight:bold;line-height:1.2}
+    .btn:active:not(.disabled){transform:scale(0.96)}
+    .btn-action{background:var(--accent2);color:#fff;flex:1}
+    .btn-move{background:var(--surface2);color:var(--text);flex:1}
+    .btn-day{background:linear-gradient(135deg,#2b4162,#12100e);color:var(--text2);flex:1;font-size:12px}
+    .btn-shop{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;flex:2}
+    .btn-buy{background:var(--success);color:#fff;white-space:nowrap;font-size:12px;padding:8px 12px}
+    .btn-vitamins{background:#7b2d8b;color:#fff;width:100%;padding:12px;font-size:14px}
+    .btn-zone-pick{background:var(--surface2);color:var(--text);width:100%;padding:14px;
+      font-size:16px;border-radius:var(--radius-sm);text-align:left}
+    .btn-zone-pick:active{background:var(--accent2)}
+    .btn.disabled,.btn:disabled{opacity:0.4;cursor:not-allowed}
+    /* Footer */
+    #footer{background:var(--bg2);border-top:1px solid var(--border);
+      padding:10px 16px env(safe-area-inset-bottom);display:flex;gap:10px;flex-shrink:0}
+    /* Empty zone */
+    .empty-zone{display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:60px 20px;gap:12px;color:var(--text2)}
+    .empty-emoji{font-size:56px}
+    .empty-zone p{font-size:15px;text-align:center}
+    /* Modals */
+    .modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);
+      display:flex;align-items:flex-end;padding:0;backdrop-filter:blur(4px)}
+    .modal.hidden{display:none}
+    .modal-box{background:var(--bg2);border:1px solid var(--border);
+      border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:480px;
+      margin:0 auto;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:slideUp .25s ease}
+    @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;
+      padding:16px 20px;border-bottom:1px solid var(--border)}
+    .modal-title{font-size:18px;font-weight:bold;color:var(--accent)}
+    .btn-close{background:rgba(255,255,255,0.1);border:none;color:var(--text);
+      width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer}
+    .modal-body{padding:16px 20px}
+    .modal-footer{padding:16px 20px;border-top:1px solid var(--border)}
+    .detail-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2)}
+    .detail-row b{color:var(--text)}
+    .shop-grid{display:flex;flex-direction:column;gap:12px}
+    .shop-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}
+    .shop-icon{font-size:28px;flex-shrink:0}
+    .shop-info{flex:1}
+    .shop-info b{display:block;font-size:14px}
+    .shop-info small{color:var(--text2);font-size:11px}
+    .shop-balance{text-align:center;padding:14px;color:var(--text2);font-size:14px}
+    .shop-balance b{color:var(--accent)}
+    .move-zones{display:flex;flex-direction:column;gap:10px}
+    /* Notifications */
+    #notification-area{position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      z-index:200;display:flex;flex-direction:column;gap:8px;width:90%;
+      max-width:420px;pointer-events:none}
+    .notification{background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius-sm);padding:12px 16px;font-size:14px;line-height:1.4;
+      box-shadow:var(--shadow);opacity:0;transform:translateY(-10px);
+      transition:opacity .3s,transform .3s;white-space:pre-line}
+    .notification.show{opacity:1;transform:translateY(0)}
+    .notification-success{border-left:3px solid var(--success)}
+    .notification-warning{border-left:3px solid var(--warning)}
+    .notification-danger{border-left:3px solid var(--danger)}
+    .notification-day-end{background:linear-gradient(135deg,var(--surface2),var(--surface));
+      border-left:3px solid var(--accent);font-size:15px}
+    /* Splash */
+    #splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+      align-items:center;justify-content:center;z-index:999;gap:12px;transition:opacity .4s}
+    #splash.hidden{opacity:0;pointer-events:none}
+    #splash .logo{font-size:72px;animation:bounce 1s infinite alternate}
+    #splash h1{font-size:22px;color:var(--accent)}
+    #splash p{color:var(--text2);font-size:13px}
+    @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  </style>
+</head>
+<body>
+<div id="splash">
+  <div class="logo">🐮</div>
+  <h1>Молочная Ферма</h1>
+  <p>Загрузка…</p>
+</div>
+
+<script>
+// ============================================================
+// config.js
+// ============================================================
+const CONFIG = {
+  SAVE_VERSION: 1,
+  START_GOLD: 800,
+  START_FEED: 15,
+  START_MEDICINE: 5,
+  ACTIONS_PER_DAY: 3,
+  PRICES: {
+    COW: 500,
+    FEED_PACK: 50,
+    FEED_AMOUNT: 10,
+    MED_PACK: 60,
+    MED_AMOUNT: 5,
+    WATERER: 200,
+    VITAMINS: 100,
+  },
+  COW_START_STATS: { fullness: 50, health: 50, happiness: 50 },
+  STAT_MIN: 0,
+  STAT_MAX: 100,
+  ZONES: {
+    barn: {
+      id: 'barn', name: 'Амбар', emoji: '🏠',
+      action: 'Покормить', actionEmoji: '🌾',
+      effects: { fullness: +10, health: 0, happiness: -2 },
+      costResource: 'feed', costAmount: 1,
+    },
+    meadow: {
+      id: 'meadow', name: 'Луг', emoji: '🌿',
+      action: 'Погулять', actionEmoji: '🐾',
+      effects: { fullness: -2, health: 0, happiness: +10 },
+      costResource: null, costAmount: 0,
+    },
+    quarantine: {
+      id: 'quarantine', name: 'Карантин', emoji: '🏥',
+      action: 'Полечить', actionEmoji: '💊',
+      effects: { fullness: 0, health: +10, happiness: -5 },
+      costResource: 'medicine', costAmount: 1,
+    },
+  },
+  ZONE_ORDER: ['barn', 'meadow', 'quarantine'],
+  MILK_DIVISOR: 10,
+  MILK_PRICE: 3,
+  WATERER_HAPPINESS_BONUS: 5,
+  VITAMINS_HEALTH_BONUS: 10,
+  DAILY_DECAY: { fullness: -8, health: -3, happiness: -5 },
+  COW_NAMES: [
+    'Зорька','Бурёнка','Ромашка','Дочка','Снежка','Милка','Звёздочка',
+    'Мурка','Лялька','Красотка','Пеструха','Ночка','Лунка','Василиса',
+    'Агаша','Глаша','Дуняша','Фрося','Матрёша','Пеннелопа','Белка',
+    'Дымка','Радуга','Ягодка','Кнопка','Пуговка','Звонкая','Теплуша',
+  ],
+  START_COWS: 2,
+};
+window.CONFIG = CONFIG;
+
+// ============================================================
+// eventEmitter.js
+// ============================================================
+class EventEmitter {
+  constructor() { this._listeners = {}; }
+  on(event, fn) {
+    if (!this._listeners[event]) this._listeners[event] = [];
+    this._listeners[event].push(fn); return this;
+  }
+  off(event, fn) {
+    if (!this._listeners[event]) return this;
+    this._listeners[event] = this._listeners[event].filter(l => l !== fn); return this;
+  }
+  once(event, fn) {
+    const w = (...a) => { fn(...a); this.off(event, w); }; return this.on(event, w);
+  }
+  emit(event, ...args) {
+    (this._listeners[event] || []).forEach(fn => fn(...args)); return this;
+  }
+}
+window.GameBus = new EventEmitter();
+window.EVENTS = {
+  COW_FED:'cow:fed', COW_WALKED:'cow:walked', COW_HEALED:'cow:healed',
+  COW_MOVED:'cow:moved', COW_DIED:'cow:died', COW_BOUGHT:'cow:bought',
+  COW_MILKED:'cow:milked', DAY_END:'day:end', DAY_START:'day:start',
+  SHOP_PURCHASE:'shop:purchase', VITAMINS_USED:'cow:vitamins',
+  WATERER_BOUGHT:'upgrade:waterer', STATS_CHANGED:'stats:changed',
+  UI_REFRESH:'ui:refresh', NOTIFICATION:'ui:notification',
+};
+
+// ============================================================
+// cowManager.js
+// ============================================================
+class CowManager {
+  constructor() { this.cows = []; this._usedNames = new Set(); }
+  load(savedCows) {
+    this.cows = savedCows || [];
+    this.cows.forEach(c => this._usedNames.add(c.name));
+  }
+  createCow(zone = 'barn') {
+    const name = this._randomName();
+    const s = CONFIG.COW_START_STATS;
+    const cow = {
+      id: `cow_${Date.now()}_${Math.random().toString(36).slice(2,6)}`,
+      name, zone,
+      fullness: s.fullness, health: s.health, happiness: s.happiness,
+      milkAmount: 0, actionsLeft: CONFIG.ACTIONS_PER_DAY, vitaminsUsed: false,
+    };
+    this.cows.push(cow);
+    this._usedNames.add(name);
+    GameBus.emit(EVENTS.COW_BOUGHT, cow);
+    GameBus.emit(EVENTS.UI_REFRESH);
+    return cow;
+  }
+  getCow(id) { return this.cows.find(c => c.id === id); }
+  getCowsInZone(zoneId) { return this.cows.filter(c => c.zone === zoneId); }
+  changeStat(cow, stat, delta) {
+    cow[stat] = Math.max(CONFIG.STAT_MIN, Math.min(CONFIG.STAT_MAX, (cow[stat] || 0) + delta));
+  }
+  applyZoneEffects(cow, zoneId) {
+    const zone = CONFIG.ZONES[zoneId]; if (!zone) return;
+    Object.entries(zone.effects).forEach(([stat, delta]) => this.changeStat(cow, stat, delta));
+    GameBus.emit(EVENTS.STATS_CHANGED, cow);
+  }
+  moveCow(cow, targetZoneId) {
+    if (cow.actionsLeft <= 0 || cow.zone === targetZoneId) return false;
+    cow.zone = targetZoneId; cow.actionsLeft--;
+    GameBus.emit(EVENTS.COW_MOVED, cow, targetZoneId);
+    GameBus.emit(EVENTS.UI_REFRESH); return true;
+  }
+  applyVitamins(cow) {
+    if (cow.vitaminsUsed) return false;
+    this.changeStat(cow, 'health', CONFIG.VITAMINS_HEALTH_BONUS);
+    cow.vitaminsUsed = true;
+    GameBus.emit(EVENTS.VITAMINS_USED, cow);
+    GameBus.emit(EVENTS.STATS_CHANGED, cow);
+    GameBus.emit(EVENTS.UI_REFRESH); return true;
+  }
+  applyDailyDecay() {
+    const dead = [];
+    this.cows.forEach(cow => {
+      Object.entries(CONFIG.DAILY_DECAY).forEach(([stat, delta]) => this.changeStat(cow, stat, delta));
+      if (cow.health <= CONFIG.STAT_MIN) dead.push(cow);
+    });
+    dead.forEach(cow => this._removeCow(cow)); return dead;
+  }
+  startNewDay(upgrades) {
+    this.cows.forEach(cow => {
+      cow.actionsLeft = CONFIG.ACTIONS_PER_DAY;
+      if (upgrades && upgrades.waterer) this.changeStat(cow, 'happiness', CONFIG.WATERER_HAPPINESS_BONUS);
+      // EXTEND: сезонные бонусы здесь
+    });
+    GameBus.emit(EVENTS.DAY_START); GameBus.emit(EVENTS.UI_REFRESH);
+  }
+  milkAll() {
+    let total = 0;
+    this.cows.forEach(cow => {
+      const milk = Math.floor((cow.fullness + cow.health + cow.happiness) / CONFIG.MILK_DIVISOR);
+      cow.milkAmount = milk; total += milk;
+      GameBus.emit(EVENTS.COW_MILKED, cow, milk);
+    });
+    this.cows.forEach(cow => { cow.milkAmount = 0; }); return total;
+  }
+  allActionsSpent() {
+    return this.cows.length > 0 && this.cows.every(c => c.actionsLeft <= 0);
+  }
+  serialize() { return this.cows; }
+  _removeCow(cow) {
+    this.cows = this.cows.filter(c => c.id !== cow.id);
+    GameBus.emit(EVENTS.COW_DIED, cow); GameBus.emit(EVENTS.UI_REFRESH);
+  }
+  _randomName() {
+    const pool = CONFIG.COW_NAMES.filter(n => !this._usedNames.has(n));
+    if (pool.length === 0)
+      return CONFIG.COW_NAMES[Math.floor(Math.random() * CONFIG.COW_NAMES.length)] + ' ' + Math.floor(Math.random() * 100);
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+}
+window.cowManager = new CowManager();
+
+// ============================================================
+// economyManager.js
+// ============================================================
+class EconomyManager {
+  constructor() {
+    this.gold = CONFIG.START_GOLD; this.feed = CONFIG.START_FEED;
+    this.medicine = CONFIG.START_MEDICINE;
+    this.upgrades = { waterer: false };
+  }
+  load(data) {
+    if (!data) return;
+    this.gold = data.gold ?? this.gold; this.feed = data.feed ?? this.feed;
+    this.medicine = data.medicine ?? this.medicine;
+    this.upgrades = { ...this.upgrades, ...(data.upgrades || {}) };
+  }
+  canAfford(res, amt = 1) { return this[res] >= amt; }
+  spend(res, amt = 1) {
+    if (!this.canAfford(res, amt)) return false;
+    this[res] -= amt; GameBus.emit(EVENTS.STATS_CHANGED); return true;
+  }
+  addGold(amt) { this.gold += amt; GameBus.emit(EVENTS.STATS_CHANGED); }
+  sellMilk(total) { const e = total * CONFIG.MILK_PRICE; this.addGold(e); return e; }
+  buyFeed() {
+    if (!this.spend('gold', CONFIG.PRICES.FEED_PACK)) return false;
+    this.feed += CONFIG.PRICES.FEED_AMOUNT;
+    GameBus.emit(EVENTS.SHOP_PURCHASE, 'feed'); GameBus.emit(EVENTS.STATS_CHANGED); return true;
+  }
+  buyMedicine() {
+    if (!this.spend('gold', CONFIG.PRICES.MED_PACK)) return false;
+    this.medicine += CONFIG.PRICES.MED_AMOUNT;
+    GameBus.emit(EVENTS.SHOP_PURCHASE, 'medicine'); GameBus.emit(EVENTS.STATS_CHANGED); return true;
+  }
+  buyWaterer() {
+    if (this.upgrades.waterer) return false;
+    if (!this.spend('gold', CONFIG.PRICES.WATERER)) return false;
+    this.upgrades.waterer = true;
+    GameBus.emit(EVENTS.WATERER_BOUGHT); GameBus.emit(EVENTS.SHOP_PURCHASE, 'waterer');
+    GameBus.emit(EVENTS.STATS_CHANGED); return true;
+  }
+  buyCow() { return this.spend('gold', CONFIG.PRICES.COW); }
+  buyVitamins() { return this.spend('gold', CONFIG.PRICES.VITAMINS); }
+  serialize() { return { gold: this.gold, feed: this.feed, medicine: this.medicine, upgrades: this.upgrades }; }
+}
+window.economyManager = new EconomyManager();
+
+// ============================================================
+// saveManager.js
+// ============================================================
+class SaveManager {
+  constructor() { this.KEY = 'farm_save_v' + CONFIG.SAVE_VERSION; }
+  save() {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify({
+        version: CONFIG.SAVE_VERSION,
+        cows: cowManager.serialize(),
+        economy: economyManager.serialize(),
+        action: actionManager.serialize(),
+      }));
+    } catch(e) { console.warn('Save failed:', e); }
+  }
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+  clear() { localStorage.removeItem(this.KEY); }
+  bindAutoSave() {
+    const save = () => this.save();
+    [EVENTS.COW_FED,EVENTS.COW_WALKED,EVENTS.COW_HEALED,EVENTS.COW_MOVED,
+     EVENTS.COW_BOUGHT,EVENTS.COW_DIED,EVENTS.VITAMINS_USED,
+     EVENTS.WATERER_BOUGHT,EVENTS.SHOP_PURCHASE].forEach(ev => GameBus.on(ev, save));
+  }
+}
+window.saveManager = new SaveManager();
+
+// ============================================================
+// actionManager.js
+// ============================================================
+class ActionManager {
+  constructor() { this.day = 1; }
+  load(data) { this.day = data?.day ?? 1; }
+  doZoneAction(cowId, zoneId) {
+    const cow = cowManager.getCow(cowId);
+    const zone = CONFIG.ZONES[zoneId];
+    if (!cow || !zone) return { ok:false, reason:'Корова или зона не найдена' };
+    if (cow.zone !== zoneId) return { ok:false, reason:'Корова не в этой зоне' };
+    if (cow.actionsLeft <= 0) return { ok:false, reason:'Действия закончились' };
+    if (zone.costResource && zone.costAmount > 0) {
+      if (!economyManager.spend(zone.costResource, zone.costAmount)) {
+        return { ok:false, reason:'Не хватает ' + (zone.costResource === 'feed' ? 'корма' : 'лекарств') };
+      }
+    }
+    cowManager.applyZoneEffects(cow, zoneId);
+    cow.actionsLeft--;
+    const em = { barn:EVENTS.COW_FED, meadow:EVENTS.COW_WALKED, quarantine:EVENTS.COW_HEALED };
+    GameBus.emit(em[zoneId] || EVENTS.STATS_CHANGED, cow);
+    GameBus.emit(EVENTS.UI_REFRESH);
+    this._checkEndOfDay();
+    return { ok:true };
+  }
+  moveCow(cowId, targetZoneId) {
+    const cow = cowManager.getCow(cowId);
+    if (!cow) return { ok:false, reason:'Корова не найдена' };
+    if (cow.actionsLeft <= 0) return { ok:false, reason:'Действия закончились' };
+    if (cow.zone === targetZoneId) return { ok:false, reason:'Корова уже здесь' };
+    if (!cowManager.moveCow(cow, targetZoneId)) return { ok:false, reason:'Не удалось переместить' };
+    this._checkEndOfDay();
+    return { ok:true };
+  }
+  buyCow() {
+    if (!economyManager.buyCow()) return { ok:false, reason:'Не хватает золота' };
+    cowManager.createCow('barn'); return { ok:true };
+  }
+  buyFeed() {
+    if (!economyManager.buyFeed()) return { ok:false, reason:'Не хватает золота' };
+    GameBus.emit(EVENTS.UI_REFRESH); return { ok:true };
+  }
+  buyMedicine() {
+    if (!economyManager.buyMedicine()) return { ok:false, reason:'Не хватает золота' };
+    GameBus.emit(EVENTS.UI_REFRESH); return { ok:true };
+  }
+  buyWaterer() {
+    if (!economyManager.buyWaterer()) {
+      return { ok:false, reason: economyManager.upgrades.waterer ? 'Уже куплено' : 'Не хватает золота' };
+    }
+    GameBus.emit(EVENTS.UI_REFRESH); return { ok:true };
+  }
+  buyVitamins(cowId) {
+    const cow = cowManager.getCow(cowId);
+    if (!cow) return { ok:false, reason:'Корова не найдена' };
+    if (cow.vitaminsUsed) return { ok:false, reason:'Витамины уже использованы' };
+    if (!economyManager.buyVitamins()) return { ok:false, reason:'Не хватает золота' };
+    cowManager.applyVitamins(cow); return { ok:true };
+  }
+  forceEndDay() { this._endDay(); }
+  serialize() { return { day: this.day }; }
+  _checkEndOfDay() {
+    if (cowManager.allActionsSpent()) setTimeout(() => this._endDay(), 400);
+  }
+  _endDay() {
+    GameBus.emit(EVENTS.DAY_END, this.day);
+    const totalMilk = cowManager.milkAll();
+    const earned = economyManager.sellMilk(totalMilk);
+    const dead = cowManager.applyDailyDecay();
+    let msg = `🐄 День ${this.day} завершён!\n🥛 Молоко: ${totalMilk} л → 💰 +${earned} золота`;
+    if (dead.length > 0) msg += `\n💔 Умерли: ${dead.map(c => c.name).join(', ')}`;
+    GameBus.emit(EVENTS.NOTIFICATION, msg, 'day-end');
+    this.day++;
+    cowManager.startNewDay(economyManager.upgrades);
+    GameBus.emit(EVENTS.UI_REFRESH);
+    saveManager.save();
+  }
+}
+window.actionManager = new ActionManager();
+
+// ============================================================
+// uiManager.js
+// ============================================================
+class UIManager {
+  constructor() { this.currentZoneIndex = 0; this.touchStartX = 0; }
+  init() { this._buildSkeleton(); this._bindEvents(); this._bindSwipe(); this.refresh(); }
+  refresh() { this._renderHeader(); this._renderZoneBar(); this._renderCowList(); }
+
+  _buildSkeleton() {
+    document.body.innerHTML = `
+      <div id="app">
+        <header id="header"></header>
+        <div id="zone-bar"></div>
+        <main id="cow-list"></main>
+        <footer id="footer">
+          <button id="btn-next-day" class="btn btn-day">⏭ Следующий день</button>
+          <button id="btn-shop" class="btn btn-shop">🏪 Магазин</button>
+        </footer>
+        <div id="modal-cow" class="modal hidden"></div>
+        <div id="modal-shop" class="modal hidden"></div>
+        <div id="modal-move" class="modal hidden"></div>
+        <div id="notification-area"></div>
+      </div>`;
+    document.getElementById('btn-shop').addEventListener('click', () => this._openShop());
+    document.getElementById('btn-next-day').addEventListener('click', () => actionManager.forceEndDay());
+  }
+
+  _renderHeader() {
+    const e = economyManager;
+    document.getElementById('header').innerHTML = `
+      <div class="hud">
+        <span class="hud-item">💰 <b>${e.gold}</b></span>
+        <span class="hud-item">🌾 <b>${e.feed}</b></span>
+        <span class="hud-item">💊 <b>${e.medicine}</b></span>
+        <span class="hud-item day-badge">📅 День ${actionManager.day}</span>
+      </div>
+      ${e.upgrades.waterer ? '<div class="upgrade-badge">🚰 Автопоилка активна</div>' : ''}`;
+  }
+
+  _renderZoneBar() {
+    const zoneId = CONFIG.ZONE_ORDER[this.currentZoneIndex];
+    const zone = CONFIG.ZONES[zoneId];
+    const dots = CONFIG.ZONE_ORDER.map((_,i) =>
+      `<span class="zone-dot ${i===this.currentZoneIndex?'active':''}"></span>`).join('');
+    document.getElementById('zone-bar').innerHTML = `
+      <button class="zone-nav" id="zone-prev">◀</button>
+      <div class="zone-title">
+        <span class="zone-emoji">${zone.emoji}</span>
+        <span>${zone.name}</span>
+        <small>${cowManager.getCowsInZone(zoneId).length} коров</small>
+      </div>
+      <button class="zone-nav" id="zone-next">▶</button>
+      <div class="zone-dots">${dots}</div>`;
+    document.getElementById('zone-prev').addEventListener('click', () => this._prevZone());
+    document.getElementById('zone-next').addEventListener('click', () => this._nextZone());
+  }
+
+  _renderCowList() {
+    const zoneId = CONFIG.ZONE_ORDER[this.currentZoneIndex];
+    const cows = cowManager.getCowsInZone(zoneId);
+    const zone = CONFIG.ZONES[zoneId];
+    const list = document.getElementById('cow-list');
+    if (cows.length === 0) {
+      list.innerHTML = `<div class="empty-zone">
+        <span class="empty-emoji">${zone.emoji}</span>
+        <p>В ${zone.name.toLowerCase()} нет коров</p>
+      </div>`; return;
+    }
+    list.innerHTML = cows.map(cow => this._cowCardHTML(cow, zone)).join('');
+    cows.forEach(cow => {
+      list.querySelector(`[data-cow-id="${cow.id}"] .cow-name-btn`)
+          ?.addEventListener('click', () => this._openCowDetail(cow.id));
+      list.querySelector(`[data-cow-id="${cow.id}"] .btn-zone-action`)
+          ?.addEventListener('click', () => this._doZoneAction(cow.id, zoneId));
+      list.querySelector(`[data-cow-id="${cow.id}"] .btn-move`)
+          ?.addEventListener('click', () => this._openMoveModal(cow.id));
+    });
+  }
+
+  _cowCardHTML(cow, zone) {
+    const dots = Array.from({length:CONFIG.ACTIONS_PER_DAY},(_,i) =>
+      `<span class="action-dot ${i<cow.actionsLeft?'active':''}"></span>`).join('');
+    const noAct = cow.actionsLeft <= 0;
+    return `
+      <div class="cow-card" data-cow-id="${cow.id}">
+        <div class="cow-top">
+          <button class="cow-name-btn">🐮 ${cow.name}</button>
+          <div class="action-dots">${dots}</div>
+        </div>
+        <div class="cow-bars">
+          ${this._bar(cow.fullness,'#f4a261','🌽')}
+          ${this._bar(cow.health,'#2ec4b6','❤️')}
+          ${this._bar(cow.happiness,'#e9c46a','😊')}
+        </div>
+        <div class="cow-actions">
+          <button class="btn btn-action btn-zone-action ${noAct?'disabled':''}" ${noAct?'disabled':''}>
+            ${zone.actionEmoji} ${zone.action}
+          </button>
+          <button class="btn btn-move ${noAct?'disabled':''}" ${noAct?'disabled':''}>
+            🚚 Перевести
+          </button>
+        </div>
+      </div>`;
+  }
+
+  _bar(v, color, emoji) {
+    return `<div class="bar-row">
+      <span class="bar-emoji">${emoji}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${v}%;background:${color}"></div></div>
+      <span class="bar-val">${v}</span>
+    </div>`;
+  }
+
+  _prevZone() { this.currentZoneIndex=(this.currentZoneIndex-1+CONFIG.ZONE_ORDER.length)%CONFIG.ZONE_ORDER.length; this.refresh(); }
+  _nextZone() { this.currentZoneIndex=(this.currentZoneIndex+1)%CONFIG.ZONE_ORDER.length; this.refresh(); }
+
+  _bindSwipe() {
+    document.body.addEventListener('touchstart', e => { this.touchStartX=e.touches[0].clientX; },{passive:true});
+    document.body.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - this.touchStartX;
+      if (Math.abs(dx)>50) { dx<0?this._nextZone():this._prevZone(); }
+    },{passive:true});
+  }
+
+  _doZoneAction(cowId, zoneId) {
+    const r = actionManager.doZoneAction(cowId, zoneId);
+    if (!r.ok) this._showNotification('⚠️ '+r.reason,'warning');
+  }
+
+  _openCowDetail(cowId) {
+    const cow = cowManager.getCow(cowId); if (!cow) return;
+    const modal = document.getElementById('modal-cow');
+    modal.classList.remove('hidden');
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">🐮 ${cow.name}</span>
+          <button class="btn-close" id="close-cow">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-row">📍 Зона: <b>${CONFIG.ZONES[cow.zone]?.name}</b></div>
+          <div class="detail-row">🌽 Сытость: <b>${cow.fullness}</b>/100</div>
+          <div class="detail-row">❤️ Здоровье: <b>${cow.health}</b>/100</div>
+          <div class="detail-row">😊 Счастье: <b>${cow.happiness}</b>/100</div>
+          <div class="detail-row">🥛 Ожидаемый удой: <b>${Math.floor((cow.fullness+cow.health+cow.happiness)/CONFIG.MILK_DIVISOR)} л</b></div>
+          <div class="detail-row">⚡ Действий: <b>${cow.actionsLeft}</b>/${CONFIG.ACTIONS_PER_DAY}</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-vitamins ${cow.vitaminsUsed?'disabled':''}" id="btn-vitamins" ${cow.vitaminsUsed?'disabled':''}>
+            💉 Витамины (${CONFIG.PRICES.VITAMINS}💰)${cow.vitaminsUsed?' — использованы':''}
+          </button>
+        </div>
+      </div>`;
+    document.getElementById('close-cow').addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('btn-vitamins').addEventListener('click', () => {
+      const r = actionManager.buyVitamins(cowId);
+      if (r.ok) { this._showNotification('💉 Витамины введены! +10 ❤️','success'); this._openCowDetail(cowId); }
+      else this._showNotification('⚠️ '+r.reason,'warning');
+    });
+  }
+
+  _openMoveModal(cowId) {
+    const cow = cowManager.getCow(cowId); if (!cow) return;
+    const modal = document.getElementById('modal-move');
+    modal.classList.remove('hidden');
+    const zones = CONFIG.ZONE_ORDER.filter(z=>z!==cow.zone).map(zId => {
+      const z = CONFIG.ZONES[zId];
+      return `<button class="btn btn-zone-pick" data-zone="${zId}">${z.emoji} ${z.name}</button>`;
+    }).join('');
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">🚚 Перевести ${cow.name}</span>
+          <button class="btn-close" id="close-move">✕</button>
+        </div>
+        <div class="modal-body move-zones">${zones}</div>
+      </div>`;
+    document.getElementById('close-move').addEventListener('click', () => modal.classList.add('hidden'));
+    modal.querySelectorAll('.btn-zone-pick').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = actionManager.moveCow(cowId, btn.dataset.zone);
+        modal.classList.add('hidden');
+        if (r.ok) this._showNotification(`🚚 ${cow.name} → ${CONFIG.ZONES[btn.dataset.zone].name}`,'success');
+        else this._showNotification('⚠️ '+r.reason,'warning');
+      });
+    });
+  }
+
+  _openShop() {
+    const modal = document.getElementById('modal-shop');
+    modal.classList.remove('hidden');
+    const e = economyManager;
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">🏪 Магазин</span>
+          <button class="btn-close" id="close-shop">✕</button>
+        </div>
+        <div class="modal-body shop-grid">
+          <div class="shop-item">
+            <div class="shop-icon">🐮</div>
+            <div class="shop-info"><b>Купить корову</b><small>Характеристики 50/50/50</small></div>
+            <button class="btn btn-buy" data-action="cow">${CONFIG.PRICES.COW} 💰</button>
+          </div>
+          <div class="shop-item">
+            <div class="shop-icon">🌾</div>
+            <div class="shop-info"><b>Корм ×${CONFIG.PRICES.FEED_AMOUNT}</b><small>Кормление в Амбаре</small></div>
+            <button class="btn btn-buy" data-action="feed">${CONFIG.PRICES.FEED_PACK} 💰</button>
+          </div>
+          <div class="shop-item">
+            <div class="shop-icon">💊</div>
+            <div class="shop-info"><b>Лекарства ×${CONFIG.PRICES.MED_AMOUNT}</b><small>Лечение в Карантине</small></div>
+            <button class="btn btn-buy" data-action="medicine">${CONFIG.PRICES.MED_PACK} 💰</button>
+          </div>
+          <div class="shop-item">
+            <div class="shop-icon">🚰</div>
+            <div class="shop-info"><b>Автопоилка</b><small>+${CONFIG.WATERER_HAPPINESS_BONUS} 😊 каждый день</small></div>
+            <button class="btn btn-buy ${e.upgrades.waterer?'disabled':''}" data-action="waterer" ${e.upgrades.waterer?'disabled':''}>
+              ${e.upgrades.waterer?'✅ Куплено':CONFIG.PRICES.WATERER+' 💰'}
+            </button>
+          </div>
+        </div>
+        <div class="shop-balance">💰 Баланс: <b>${e.gold}</b> золота</div>
+      </div>`;
+    document.getElementById('close-shop').addEventListener('click', () => modal.classList.add('hidden'));
+    modal.querySelectorAll('.btn-buy').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = btn.dataset.action;
+        const r = a==='cow'?actionManager.buyCow():a==='feed'?actionManager.buyFeed():
+                  a==='medicine'?actionManager.buyMedicine():actionManager.buyWaterer();
+        if (r?.ok) {
+          this._showNotification({cow:'🐮',feed:'🌾',medicine:'💊',waterer:'🚰'}[a]+' Куплено!','success');
+          this._openShop();
+        } else this._showNotification('⚠️ '+(r?.reason||'Ошибка'),'warning');
+      });
+    });
+  }
+
+  _showNotification(msg, type='info') {
+    const area = document.getElementById('notification-area');
+    const el = document.createElement('div');
+    el.className = `notification notification-${type}`;
+    el.textContent = msg;
+    area.appendChild(el);
+    setTimeout(() => el.classList.add('show'), 10);
+    setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 3500);
+  }
+
+  _bindEvents() {
+    GameBus.on(EVENTS.UI_REFRESH, () => this.refresh());
+    GameBus.on(EVENTS.NOTIFICATION, (msg, type) => this._showNotification(msg, type));
+    GameBus.on(EVENTS.COW_DIED, cow => this._showNotification(`💔 ${cow.name} умерла`, 'danger'));
+  }
+}
+window.uiManager = new UIManager();
+
+// ============================================================
+// main — точка входа
+// ============================================================
+function initGame() {
+  const saved = saveManager.load();
+  if (saved) {
+    economyManager.load(saved.economy);
+    cowManager.load(saved.cows);
+    actionManager.load(saved.action);
+  } else {
+    for (let i = 0; i < CONFIG.START_COWS; i++) {
+      const name = cowManager._randomName();
+      const s = CONFIG.COW_START_STATS;
+      const cow = {
+        id: `cow_start_${i}`, name, zone: 'barn',
+        fullness: s.fullness, health: s.health, happiness: s.happiness,
+        milkAmount: 0, actionsLeft: CONFIG.ACTIONS_PER_DAY, vitaminsUsed: false,
+      };
+      cowManager.cows.push(cow);
+      cowManager._usedNames.add(name);
+    }
+  }
+  uiManager.init();
+  saveManager.bindAutoSave();
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) { splash.classList.add('hidden'); setTimeout(() => splash.remove(), 500); }
+  }, 500);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGame);
+} else {
+  initGame();
+}
+</script>
+
+</body>
+</html>
