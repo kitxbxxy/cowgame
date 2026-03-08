@@ -915,11 +915,11 @@ const UI={
       </div>
     </div>`;
     document.getElementById('cc').onclick=()=>m.classList.add('hidden');
-    document.getElementById('bza')?.onclick=()=>{ const r=STATE.doAction(cowId,zid); if(r.ok)this._detail(cowId); else this._notif(r.reason,'warning'); };
-    document.getElementById('bmv')?.onclick=()=>{ m.classList.add('hidden'); this._moveModal(cowId); };
-    document.getElementById('bvit')?.onclick=()=>{ const r=STATE.useVitamins(cowId); if(r.ok){this._notif('+15 здоровья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
-    document.getElementById('btonic')?.onclick=()=>{ const r=STATE.useTonic(cowId); if(r.ok){this._notif('+20 счастья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
-    document.getElementById('bbreed')?.onclick=()=>{ const r=STATE.buyBreeding(cowId); if(r.ok){this._notif('Потенциал вырос!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+    const _bza=document.getElementById('bza'); if(_bza) _bza.onclick=()=>{ const r=STATE.doAction(cowId,zid); if(r.ok)this._detail(cowId); else this._notif(r.reason,'warning'); };
+    const _bmv=document.getElementById('bmv'); if(_bmv) _bmv.onclick=()=>{ m.classList.add('hidden'); this._moveModal(cowId); };
+    const _bvit=document.getElementById('bvit'); if(_bvit) _bvit.onclick=()=>{ const r=STATE.useVitamins(cowId); if(r.ok){this._notif('+15 здоровья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+    const _btonic=document.getElementById('btonic'); if(_btonic) _btonic.onclick=()=>{ const r=STATE.useTonic(cowId); if(r.ok){this._notif('+20 счастья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+    const _bbreed=document.getElementById('bbreed'); if(_bbreed) _bbreed.onclick=()=>{ const r=STATE.buyBreeding(cowId); if(r.ok){this._notif('Потенциал вырос!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
   },
 
   _moveModal(cowId){
@@ -1137,7 +1137,6 @@ function initGame(){
     for(let i=0;i<CONFIG.START_COWS;i++) STATE.makeCow('barn');
   }
   UI.init();
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('/cowgame/sw.js').catch(()=>{});
   setTimeout(()=>{
     const s=document.getElementById('splash');
     if(s){ s.classList.add('hidden'); setTimeout(()=>s.remove(),350); }
