@@ -6,1049 +6,1143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="COW FARM"/>
-  <meta name="theme-color" content="#0f380f"/>
-  <title>COW FARM GB</title>
+  <meta name="apple-mobile-web-app-title" content="Ферма"/>
+  <meta name="theme-color" content="#5c3d2e"/>
+  <title>Молочная ферма</title>
   <style>
     :root {
-      --gb0:#0f380f; --gb1:#306230; --gb2:#8bac0f; --gb3:#9bbc0f; --gb4:#c4d94a;
-      --font:'Courier New',monospace;
+      --cream:#fdf6ec; --sand:#e8d5b0; --brown:#5c3d2e; --brown2:#8b5e3c; --brown3:#c49a6c;
+      --rose:#e8a598; --sage:#8fad7f; --sage2:#6b9660; --sky:#a8d4e8; --sky2:#7bb8d4;
+      --mint:#b8dfd0; --lavender:#c9b8e8; --gold:#d4a843; --gold2:#e8c56a;
+      --red:#d45c5c; --text:#3a2518; --text2:#7a5c42; --font:'Courier New',monospace;
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated}
-    html,body{height:100%;overflow:hidden;background:var(--gb0);color:var(--gb0);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:var(--brown);color:var(--text);
       font-family:var(--font);-webkit-tap-highlight-color:transparent;user-select:none}
-    body::before{content:'';position:fixed;inset:0;
-      background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px),
-      repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);
-      pointer-events:none;z-index:0}
-    #app{display:flex;flex-direction:column;height:100%;height:100dvh;max-width:480px;
-      margin:0 auto;position:relative;overflow:hidden;background:var(--gb3);z-index:1;
-      box-shadow:0 0 0 4px var(--gb0),0 0 0 8px var(--gb1),0 0 40px rgba(0,0,0,0.8)}
+    #app{display:flex;flex-direction:column;height:100%;height:100dvh;max-width:430px;
+      margin:0 auto;position:relative;overflow:hidden;background:var(--cream);
+      box-shadow:0 0 0 3px var(--brown),0 0 32px rgba(0,0,0,.5)}
 
 ```
 /* ── ШАПКА ── */
-#header{background:var(--gb1);
-  padding-top:max(48px, calc(16px + env(safe-area-inset-top)));
-  padding-left:12px;padding-right:12px;padding-bottom:8px;
-  border-bottom:4px solid var(--gb0);flex-shrink:0}
-.hud{display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:wrap}
-.hud-item{background:var(--gb3);border:2px solid var(--gb0);box-shadow:2px 2px 0 var(--gb0);
-  padding:4px 8px;font-size:9px;color:var(--gb0);white-space:nowrap;line-height:1.6;font-weight:bold}
-.day-badge{background:var(--gb0);color:var(--gb3);border:2px solid var(--gb2);box-shadow:2px 2px 0 var(--gb2)}
-.upgrade-badge{text-align:center;font-size:7px;color:var(--gb3);background:var(--gb0);
-  padding:2px 6px;margin-top:4px;border:2px solid var(--gb2)}
-.season-badge{text-align:center;font-size:7px;color:var(--gb0);background:var(--gb4);
-  padding:2px 6px;margin-top:4px;border:2px solid var(--gb0)}
+#header{background:var(--brown);flex-shrink:0;
+  padding:max(44px,calc(10px + env(safe-area-inset-top))) 12px 8px}
+.hud{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.hud-item{background:var(--sand);border:2px solid var(--brown2);box-shadow:2px 2px 0 var(--brown);
+  padding:5px 11px;font-size:13px;font-weight:bold;color:var(--brown);white-space:nowrap;
+  display:flex;align-items:center;gap:6px}
+.hud-icon{width:18px;height:18px;flex-shrink:0}
+.day-badge{background:var(--brown2);color:var(--cream);border-color:var(--brown3);font-size:12px}
+.hud-row2{display:flex;gap:5px;margin-top:5px;align-items:center;flex-wrap:wrap}
+.stag{border:2px solid var(--brown2);box-shadow:2px 2px 0 var(--brown);
+  padding:4px 9px;font-size:10px;font-weight:bold;white-space:nowrap}
 
 /* ── ЗОНА ── */
-#zone-bar{background:var(--gb2);padding:8px 12px 6px;display:flex;align-items:center;
-  gap:8px;border-bottom:4px solid var(--gb0);flex-shrink:0;flex-wrap:wrap}
-.zone-nav{background:var(--gb1);border:2px solid var(--gb0);box-shadow:2px 2px 0 var(--gb0);
-  width:32px;height:32px;color:var(--gb3);font-size:14px;cursor:pointer;flex-shrink:0;
-  font-family:var(--font);display:flex;align-items:center;justify-content:center}
+#zone-bar{display:flex;align-items:center;gap:8px;padding:9px 12px 6px;flex-shrink:0;
+  flex-wrap:wrap;border-bottom:3px solid var(--brown);transition:background .3s}
+.zone-nav{width:34px;height:34px;border:2px solid currentColor;box-shadow:2px 2px 0 var(--brown);
+  background:rgba(255,255,255,.25);font-size:15px;cursor:pointer;font-family:var(--font);
+  font-weight:bold;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .zone-nav:active{box-shadow:none;transform:translate(2px,2px)}
-.zone-title{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
-.zone-emoji{font-size:22px;line-height:1}
-.zone-title span{font-size:9px;color:var(--gb0);font-weight:bold}
-.zone-title small{font-size:7px;color:var(--gb1)}
-.zone-dots{width:100%;display:flex;justify-content:center;gap:6px;padding-top:4px}
-.zone-dot{width:8px;height:8px;background:var(--gb1);border:2px solid var(--gb0)}
-.zone-dot.active{background:var(--gb0)}
+.zone-title{flex:1;text-align:center}
+.zone-title-name{font-size:13px;font-weight:bold}
+.zone-title-count{font-size:9px;opacity:.75}
+.zone-dots{width:100%;display:flex;justify-content:center;gap:7px;padding-top:3px}
+.zone-dot{width:9px;height:9px;border:2px solid currentColor;opacity:.35}
+.zone-dot.active{opacity:1;background:currentColor}
 
-/* ── ПОЛЕ С КОРОВАМИ (свободное расположение) ── */
-#cow-list{flex:1;overflow:hidden;position:relative;}
+/* ── ПОЛЕ ── */
+#cow-list{flex:1;overflow:hidden;position:relative}
+.zone-bg{position:absolute;inset:0;overflow:hidden}
+.zone-bg-meadow{background:linear-gradient(180deg,#c8eaf8 0%,#a8d8f0 30%,#c8ebb8 32%,#90c878 55%,#70b858 100%)}
+.zone-bg-barn{background:repeating-linear-gradient(180deg,#7a3a1a 0px,#7a3a1a 16px,#6a2e12 16px,#6a2e12 18px)}
+.zone-bg-barn::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent,transparent 34px,rgba(0,0,0,.1) 34px,rgba(0,0,0,.1) 36px)}
+.barn-hay{position:absolute;bottom:0;left:0;right:0;height:22px;
+  background:repeating-linear-gradient(90deg,#d4a843 0,#d4a843 6px,#c49a34 6px,#c49a34 8px);border-top:3px solid #8b6a1a}
+.barn-win{position:absolute;top:7%;right:8%;width:40px;height:40px;
+  background:linear-gradient(135deg,#ffe89a,#ffc84a);border:3px solid #5a2a08;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.4),2px 2px 0 #3a1a00}
+.barn-win::before,.barn-win::after{content:'';position:absolute;background:rgba(90,42,8,.3)}
+.barn-win::before{inset:0 46% 0 46%}.barn-win::after{inset:46% 0 46% 0}
+.zone-bg-quarantine{background:linear-gradient(180deg,#daeef8 0%,#daeef8 63%,#c8d8c8 63%,#c8d8c8 66%,#f4f4f4 66%,#f4f4f4 100%)}
+.zone-bg-quarantine::before{content:'';position:absolute;left:0;right:0;bottom:0;height:34%;
+  background:repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(0,0,0,.06) 22px,rgba(0,0,0,.06) 24px),
+  repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.06) 22px,rgba(0,0,0,.06) 24px)}
+.vet-cross{position:absolute;top:7%;left:50%;transform:translateX(-50%);width:24px;height:24px;
+  background:linear-gradient(#d45c5c,#d45c5c) center/8px 100% no-repeat,
+  linear-gradient(#d45c5c,#d45c5c) center/100% 8px no-repeat}
 
-/* Задний план зоны — общий слой */
-.zone-bg{position:absolute;inset:0;overflow:hidden;}
-
-/* ══ ЛУГ: голубое небо + зелёная трава ══ */
-.zone-bg-meadow{
-  background:linear-gradient(
-    180deg,
-    #7ec8e3 0%,   /* небо */
-    #a8dff0 38%,
-    #b5e8a0 38%,  /* горизонт */
-    #6ab04c 55%,
-    #4a8c3f 100%  /* трава у ног */
-  );
-}
-/* Пиксельные облака */
-.zone-bg-meadow::before{
-  content:'☁️  ☁️       ☁️';
-  position:absolute;top:4%;left:0;right:0;
-  font-size:22px;letter-spacing:8px;
-  opacity:0.85;padding-left:8px;
-}
-/* Полоска травы у нижнего края */
-.zone-bg-meadow::after{
-  content:'🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿';
-  position:absolute;bottom:0;left:0;right:0;
-  font-size:18px;letter-spacing:-2px;line-height:1;
-  overflow:hidden;height:24px;
-}
-/* Солнышко */
-.meadow-sun{position:absolute;top:5%;right:8%;font-size:28px;opacity:0.9;}
-/* Цветочки */
-.meadow-flowers{position:absolute;bottom:20px;left:0;right:0;
-  font-size:14px;letter-spacing:12px;padding-left:16px;opacity:0.8;}
-
-/* ══ АМБАР: деревянные доски + сено ══ */
-.zone-bg-barn{
-  background:
-    /* деревянные доски — горизонтальные полосы */
-    repeating-linear-gradient(
-      180deg,
-      #8B4513 0px, #8B4513 18px,
-      #7a3b10 18px, #7a3b10 20px
-    );
-}
-/* Вертикальные доски */
-.zone-bg-barn::before{
-  content:'';
-  position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 38px,
-    rgba(0,0,0,0.12) 38px, rgba(0,0,0,0.12) 40px
-  );
-}
-/* Сено у пола */
-.zone-bg-barn::after{
-  content:'🌾🌾🌾🌾🌾🌾🌾🌾🌾🌾🌾🌾🌾';
-  position:absolute;bottom:0;left:0;right:0;
-  font-size:20px;letter-spacing:-1px;line-height:1;
-  overflow:hidden;height:26px;
-}
-.barn-window{position:absolute;top:8%;right:10%;width:44px;height:44px;
-  background:linear-gradient(135deg,#ffd97d,#ffaa00);
-  border:3px solid #5a2d00;box-shadow:inset 2px 2px 0 rgba(255,255,255,0.3),3px 3px 0 #3a1a00;}
-.barn-window::before{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 47%,rgba(0,0,0,0.25) 47%,rgba(0,0,0,0.25) 53%,transparent 53%),
-            linear-gradient(0deg,transparent 47%,rgba(0,0,0,0.25) 47%,rgba(0,0,0,0.25) 53%,transparent 53%);}
-.barn-lamp{position:absolute;top:6%;left:10%;font-size:22px;}
-
-/* ══ КАРАНТИН: кабинет ветеринара ══ */
-.zone-bg-quarantine{
-  background:
-    /* Плитка на полу */
-    linear-gradient(180deg,
-      #e8f4f8 0%,   /* стены — светло-голубые */
-      #e8f4f8 62%,
-      #d0e8d0 62%,  /* плинтус */
-      #c8e0c8 65%,
-      #f0f0f0 65%,  /* пол — белая плитка */
-      #f0f0f0 100%
-    );
-}
-/* Плиточный узор на полу */
-.zone-bg-quarantine::before{
-  content:'';
-  position:absolute;left:0;right:0;bottom:0;height:35%;
-  background:
-    repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(0,0,0,0.07) 24px,rgba(0,0,0,0.07) 26px),
-    repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(0,0,0,0.07) 24px,rgba(0,0,0,0.07) 26px);
-}
-/* Красный крест на стене */
-.zone-bg-quarantine::after{
-  content:'';
-  position:absolute;top:8%;left:50%;transform:translateX(-50%);
-  width:28px;height:28px;
-  background:
-    linear-gradient(#e74c3c,#e74c3c) center/10px 100% no-repeat,
-    linear-gradient(#e74c3c,#e74c3c) center/100% 10px no-repeat;
-  border:2px solid #c0392b;
-}
-.vet-cross{position:absolute;top:5%;left:50%;transform:translateX(-50%);
-  font-size:28px;}
-.vet-cabinet{position:absolute;top:10%;right:6%;font-size:20px;
-  background:#b8d4b8;border:2px solid #6a9a6a;padding:4px;
-  box-shadow:2px 2px 0 #4a7a4a;}
-.vet-items{position:absolute;top:10%;left:6%;font-size:16px;
-  display:flex;flex-direction:column;gap:4px;line-height:1;}
-
-/* Корова поверх фона */
-.cow-sprite{position:absolute;cursor:pointer;
+/* ── КОРОВА ── */
+.cow-sprite{position:absolute;z-index:2;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:3px;
-  width:80px;z-index:2;}
+  width:108px;transform:translate(-50%,-50%)}
+.cow-sprite:active svg{filter:brightness(.85)}
+.cow-danger{animation:cowWarn .85s steps(2) infinite}
+@keyframes cowWarn{0%,100%{filter:drop-shadow(0 0 5px #d45c5c)}50%{filter:none}}
+.cow-dot-row{display:flex;gap:3px}
+.cow-dot{width:11px;height:11px;border:2px solid var(--brown);background:var(--sand)}
+.cow-dot.on{background:var(--gold);box-shadow:0 0 4px var(--gold2)}
+.cow-name-tag{font-size:8px;font-weight:bold;padding:2px 5px;border:2px solid;
+  text-align:center;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cow-bars-mini{display:flex;flex-direction:column;gap:3px;width:100px}
+.mini-row{display:flex;align-items:center;gap:3px}
+.mini-ico{width:13px;height:13px;flex-shrink:0}
+.mini-track{flex:1;height:7px;background:rgba(255,255,255,.5);border:1px solid var(--brown);overflow:hidden;position:relative}
+.mini-fill{height:100%;transition:width .2s}
+.mf-hp{background:var(--red)}.mf-hap{background:var(--lavender)}.mf-ful{background:var(--gold)}
+.mf-low{background:#c07070!important;opacity:.75}
+/* Потенциал молока — тонкая полоска поверх */
+.milk-pot-bar{position:absolute;top:0;right:0;height:100%;background:rgba(100,180,100,.35);border-left:1px solid rgba(80,140,80,.5)}
 
-/* Пиксельный аватар коровы */
-.cow-sprite{position:absolute;cursor:pointer;transition:none;
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  width:80px}
-.cow-sprite:active .cow-body{transform:translate(2px,2px);box-shadow:none}
-
-.cow-body{background:var(--gb2);border:2px solid var(--gb0);box-shadow:3px 3px 0 var(--gb0);
-  width:56px;height:48px;display:flex;align-items:center;justify-content:center;
-  font-size:28px;position:relative;flex-shrink:0}
-
-/* Индикатор действий над коровой */
-.cow-actions-dots{display:flex;gap:3px;margin-bottom:1px}
-.cow-action-dot{width:7px;height:7px;background:var(--gb1);border:1px solid var(--gb0)}
-.cow-action-dot.active{background:var(--gb0)}
-
-/* Имя коровы */
-.cow-label{background:var(--gb0);color:var(--gb3);font-size:6px;padding:2px 4px;
-  border:1px solid var(--gb1);text-align:center;width:100%;word-break:break-all;line-height:1.4}
-
-/* Мини-полоски здоровья под аватаром */
-.cow-mini-bars{display:flex;flex-direction:column;gap:2px;width:56px}
-.mini-bar-track{height:4px;background:var(--gb3);border:1px solid var(--gb0);overflow:hidden}
-.mini-bar-fill{height:100%;background:var(--gb0)}
-.mini-bar-fill.low{background:var(--gb1)}
-
-/* Кнопка действия зоны (появляется при нажатии на корову — через detail modal) */
-
-/* Пустая зона */
-.empty-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:100%;gap:14px}
-.empty-emoji{font-size:48px}
-.empty-zone p{font-size:8px;text-align:center;color:var(--gb1);line-height:2}
+.empty-zone{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px}
+.empty-text{background:rgba(255,255,255,.85);border:2px solid var(--brown);padding:10px 16px;
+  font-size:11px;color:var(--text);box-shadow:2px 2px 0 var(--brown)}
 
 /* ── ФУТЕР ── */
-#footer{background:var(--gb1);border-top:4px solid var(--gb0);
-  padding:8px 12px;padding-bottom:calc(8px + env(safe-area-inset-bottom));
-  display:flex;gap:8px;flex-shrink:0}
+#footer{background:var(--brown);border-top:3px solid var(--brown2);
+  padding:9px 12px calc(9px + env(safe-area-inset-bottom));display:flex;gap:8px;flex-shrink:0}
 
 /* ── КНОПКИ ── */
-.btn{border:2px solid var(--gb0);box-shadow:3px 3px 0 var(--gb0);padding:8px 10px;
-  font-size:8px;font-family:var(--font);cursor:pointer;font-weight:bold;line-height:1.4;
-  background:var(--gb1);color:var(--gb3);text-transform:uppercase;letter-spacing:0.5px}
-.btn:active:not(.disabled){box-shadow:none;transform:translate(3px,3px)}
-.btn-action{background:var(--gb0);color:var(--gb3);flex:1}
-.btn-move{background:var(--gb1);color:var(--gb3);flex:1}
-.btn-day{background:var(--gb1);color:var(--gb2);flex:1;font-size:7px}
-.btn-shop{background:var(--gb0);color:var(--gb3);flex:2}
-.btn-buy{background:var(--gb0);color:var(--gb3);font-size:7px;padding:7px 10px;white-space:nowrap}
-.btn-vitamins{background:var(--gb0);color:var(--gb3);width:100%;padding:12px;font-size:8px}
-.btn-ok{background:var(--gb0);color:var(--gb3);width:100%;padding:14px;font-size:9px;
-  border:2px solid var(--gb2);box-shadow:3px 3px 0 var(--gb2)}
-.btn-zone-pick{background:var(--gb2);color:var(--gb0);width:100%;padding:12px;
-  font-size:9px;text-align:left;border:2px solid var(--gb0);box-shadow:3px 3px 0 var(--gb0);
-  font-family:var(--font);cursor:pointer}
-.btn-zone-pick:active{box-shadow:none;transform:translate(3px,3px)}
-.btn.disabled,.btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none}
+.btn{border:2px solid var(--brown);box-shadow:3px 3px 0 var(--brown);padding:11px 13px;
+  font-size:11px;font-family:var(--font);font-weight:bold;cursor:pointer;line-height:1.3;text-transform:uppercase}
+.btn:active:not([disabled]):not(.disabled){box-shadow:none;transform:translate(3px,3px)}
+.btn-day{background:var(--sand);color:var(--brown);flex:1;font-size:9px}
+.btn-shop{background:var(--brown2);color:var(--cream);flex:2}
+.btn-action{background:var(--sage2);color:var(--cream);width:100%}
+.btn-move{background:var(--sky2);color:var(--cream);width:100%}
+.btn-buy{background:var(--gold);color:var(--brown);font-size:10px;padding:9px 11px;white-space:nowrap}
+.btn-vit{background:var(--lavender);color:var(--brown);width:100%;padding:12px;font-size:11px}
+.btn-ok{background:var(--sage2);color:var(--cream);width:100%;padding:14px;font-size:12px;
+  border-color:var(--sage);box-shadow:3px 3px 0 var(--sage)}
+.btn-zpick{background:var(--cream);color:var(--brown);width:100%;padding:14px;font-size:12px;
+  text-align:left;border:2px solid var(--brown);box-shadow:3px 3px 0 var(--brown);
+  font-family:var(--font);cursor:pointer;font-weight:bold}
+.btn-zpick:active{box-shadow:none;transform:translate(3px,3px)}
+.btn-upgrade{background:var(--mint);color:var(--brown);font-size:10px;padding:9px 11px;white-space:nowrap}
+.btn.disabled,.btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none}
 
 /* ── МОДАЛКИ ── */
-.modal{position:fixed;inset:0;z-index:100;background:rgba(15,56,15,0.88);
-  display:flex;align-items:flex-end}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(58,37,24,.72);
+  display:flex;align-items:flex-end;backdrop-filter:blur(2px)}
 .modal.hidden{display:none}
-.modal-box{background:var(--gb3);border:4px solid var(--gb0);border-bottom:none;
-  width:100%;max-width:480px;margin:0 auto;max-height:85vh;overflow-y:auto;
-  -webkit-overflow-scrolling:touch;animation:slideUp 0.12s steps(3);
-  box-shadow:0 -4px 0 var(--gb0)}
-@keyframes slideUp{from{transform:translateY(60px)}to{transform:translateY(0)}}
-.modal-header{display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;background:var(--gb0);border-bottom:4px solid var(--gb1)}
-.modal-title{font-size:9px;color:var(--gb3);font-weight:bold}
-.btn-close{background:var(--gb2);border:2px solid var(--gb3);color:var(--gb0);
-  width:28px;height:28px;font-size:12px;cursor:pointer;font-family:var(--font);
-  box-shadow:2px 2px 0 var(--gb1);font-weight:bold}
+.modal-box{background:var(--cream);border:3px solid var(--brown);border-bottom:none;
+  width:100%;max-width:430px;margin:0 auto;max-height:88vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;animation:slideUp .18s ease-out;box-shadow:0 -3px 0 var(--brown)}
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-hd{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;background:var(--brown);border-bottom:3px solid var(--brown2)}
+.modal-title{font-size:11px;color:var(--cream);font-weight:bold}
+.btn-close{background:var(--rose);border:2px solid var(--cream);color:var(--brown);
+  width:30px;height:30px;font-size:15px;cursor:pointer;font-family:var(--font);
+  box-shadow:2px 2px 0 var(--brown2);font-weight:bold}
 .btn-close:active{box-shadow:none;transform:translate(2px,2px)}
 .modal-body{padding:14px 16px}
-.modal-footer{padding:12px 16px;border-top:2px solid var(--gb2)}
+.modal-foot{padding:12px 16px;border-top:2px solid var(--sand)}
 
-.detail-row{padding:7px 0;border-bottom:2px solid var(--gb2);font-size:7px;
-  color:var(--gb1);line-height:1.8}
-.detail-row b{color:var(--gb0)}
+/* Карточка коровы */
+.cow-info-grid{display:flex;gap:12px;align-items:flex-start;
+  margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--sand)}
+.cow-info-text{font-size:9px;color:var(--text2);line-height:2.1}
+.cow-info-text b{color:var(--text)}
+.cow-trait{display:inline-block;font-size:8px;padding:2px 6px;border:2px solid;
+  font-weight:bold;margin:1px;background:var(--sand)}
+.sbar-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sand)}
+.sbar-lbl{font-size:9px;width:78px;flex-shrink:0;color:var(--text2)}
+.sbar-track{flex:1;height:14px;background:var(--sand);border:2px solid var(--brown2);overflow:hidden;position:relative}
+.sbar-fill{height:100%;transition:width .2s}
+.sb-hp .sbar-fill{background:var(--red)}.sb-hap .sbar-fill{background:var(--lavender)}
+.sb-ful .sbar-fill{background:var(--gold)}
+.sb-milk .sbar-fill{background:var(--mint)}
+.sbar-pot{position:absolute;top:0;bottom:0;right:0;background:rgba(100,200,100,.2);border-left:2px dashed rgba(80,150,80,.5)}
+.sbar-val{font-size:10px;width:28px;text-align:right;color:var(--text);font-weight:bold}
+.buff-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.buff-tag{font-size:8px;padding:3px 7px;border:2px solid var(--sage2);background:var(--mint);color:var(--brown);font-weight:bold}
+.buff-tag.debuff{border-color:var(--red);background:#fde8e8}
 
-/* Баффы/дебаффы */
-.buff-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
-.buff-tag{font-size:6px;padding:3px 5px;border:1px solid var(--gb0);background:var(--gb4);
-  color:var(--gb0);line-height:1.4}
-.buff-tag.debuff{background:var(--gb1);color:var(--gb3)}
-
-/* Отчёт по дойке */
-.milk-report-row{display:flex;justify-content:space-between;align-items:center;
-  padding:7px 0;border-bottom:2px solid var(--gb2);font-size:7px;gap:8px}
-.milk-report-row .cow-name-r{color:var(--gb0);font-weight:bold;flex:1}
-.milk-report-row .cow-calc{color:var(--gb1);font-size:6px}
-.milk-report-total{background:var(--gb0);color:var(--gb3);padding:10px;margin-top:10px;
-  font-size:8px;text-align:center;border:2px solid var(--gb2);line-height:2}
+/* Отчёт дойки */
+.mr-row{display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:2px solid var(--sand);font-size:9px;gap:8px}
+.mr-name{color:var(--text);font-weight:bold;flex:1}
+.mr-calc{color:var(--text2);font-size:8px}
+.mr-total{background:var(--brown);color:var(--cream);padding:11px;margin-top:10px;
+  font-size:11px;text-align:center;border:2px solid var(--brown2);line-height:2.1}
 
 /* Магазин */
-.shop-grid{display:flex;flex-direction:column;gap:10px}
-.shop-item{display:flex;align-items:center;gap:10px;background:var(--gb2);
-  border:2px solid var(--gb0);box-shadow:2px 2px 0 var(--gb0);padding:10px}
-.shop-icon{font-size:24px;flex-shrink:0}
+.shop-tabs{display:flex;gap:0;border-bottom:3px solid var(--brown);margin:-14px -16px 14px}
+.shop-tab{flex:1;padding:10px;font-size:10px;font-family:var(--font);font-weight:bold;
+  background:var(--sand);color:var(--text2);border:none;cursor:pointer;border-right:2px solid var(--brown)}
+.shop-tab:last-child{border-right:none}
+.shop-tab.active{background:var(--cream);color:var(--text)}
+.shop-grid{display:flex;flex-direction:column;gap:9px}
+.shop-item{display:flex;align-items:center;gap:11px;background:var(--sand);
+  border:2px solid var(--brown2);box-shadow:2px 2px 0 var(--brown);padding:9px}
+.shop-ico{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .shop-info{flex:1}
-.shop-info b{display:block;font-size:7px;color:var(--gb0);margin-bottom:3px}
-.shop-info small{color:var(--gb1);font-size:6px;line-height:1.6}
-.shop-balance{text-align:center;padding:12px;color:var(--gb1);font-size:7px;
-  border-top:2px solid var(--gb2);margin-top:8px}
-.shop-balance b{color:var(--gb0)}
+.shop-info b{display:block;font-size:10px;color:var(--text);margin-bottom:2px}
+.shop-info small{color:var(--text2);font-size:8px;line-height:1.5}
+.shop-info .season-effect{font-size:8px;color:var(--sage2);font-weight:bold}
+.shop-bal{text-align:center;padding:11px;color:var(--text2);font-size:10px;
+  border-top:2px solid var(--sand);margin-top:8px}
+.shop-bal b{color:var(--text)}
 .move-zones{display:flex;flex-direction:column;gap:8px}
 
 /* Уведомления */
-#notification-area{position:fixed;top:16px;left:50%;transform:translateX(-50%);
-  z-index:200;display:flex;flex-direction:column;gap:6px;width:90%;max-width:420px;
-  pointer-events:none}
-.notification{background:var(--gb0);border:2px solid var(--gb2);box-shadow:4px 4px 0 var(--gb1);
-  padding:10px 14px;font-size:7px;line-height:1.8;color:var(--gb3);opacity:0;
-  transform:translateY(-8px);transition:opacity 0.1s steps(3),transform 0.1s steps(3);
-  white-space:pre-line}
-.notification.show{opacity:1;transform:translateY(0)}
-.notification-success{border-color:var(--gb3)}
-.notification-warning{border-color:var(--gb2);color:var(--gb2)}
-.notification-danger{border-color:#f55;color:#f99}
-.notification-day-end{font-size:8px;border-color:var(--gb3)}
+#notif-area{position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  z-index:200;display:flex;flex-direction:column;gap:5px;width:88%;max-width:400px;pointer-events:none}
+.notif{background:var(--brown);border:2px solid var(--brown3);box-shadow:3px 3px 0 rgba(0,0,0,.3);
+  padding:9px 14px;font-size:11px;line-height:1.6;color:var(--cream);opacity:0;
+  transform:translateY(-8px);transition:opacity .2s,transform .2s;white-space:pre-line}
+.notif.show{opacity:1;transform:translateY(0)}
+.notif-success{border-color:var(--sage2)}.notif-warning{border-color:var(--gold);color:var(--gold2)}
+.notif-danger{border-color:var(--red);color:#ffaaaa}
 
-/* Сплэш */
-#splash{position:fixed;inset:0;background:var(--gb3);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;z-index:999;gap:16px;transition:opacity 0.1s steps(3)}
+/* ── ПЕРЕХОД МЕЖДУ ДНЯМИ ── */
+#day-overlay{position:fixed;inset:0;z-index:300;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;opacity:0;
+  background:rgba(15,5,0,.85);transition:opacity .35s}
+#day-overlay.show{opacity:1;pointer-events:all}
+.day-card{background:var(--cream);border:4px solid var(--brown);box-shadow:6px 6px 0 var(--brown);
+  padding:28px 24px;text-align:center;min-width:260px;
+  transform:scale(.85);transition:transform .3s}
+#day-overlay.show .day-card{transform:scale(1)}
+.day-card-title{font-size:14px;font-weight:bold;color:var(--brown);margin-bottom:6px}
+.day-card-season{font-size:22px;margin-bottom:10px}
+.day-card-info{font-size:10px;color:var(--text2);line-height:2.2}
+.day-card-info b{color:var(--text)}
+
+/* ── GAME OVER ── */
+#gameover{position:fixed;inset:0;z-index:500;background:rgba(40,15,5,.94);
+  display:flex;align-items:center;justify-content:center}
+#gameover.hidden{display:none}
+.go-box{background:var(--cream);border:4px solid var(--brown);box-shadow:6px 6px 0 var(--brown);
+  padding:30px 24px;text-align:center;max-width:340px;width:90%}
+.go-title{font-size:20px;font-weight:bold;color:var(--red);margin-bottom:8px}
+.go-sub{font-size:10px;color:var(--text2);line-height:2.2;margin-bottom:12px}
+.go-stat{font-size:11px;color:var(--text);font-weight:bold;margin-bottom:18px;
+  background:var(--sand);padding:11px;border:2px solid var(--brown2);line-height:2.2}
+.btn-restart{background:var(--brown);color:var(--cream);width:100%;padding:15px;
+  font-size:13px;border:2px solid var(--brown2);box-shadow:3px 3px 0 var(--brown2);
+  font-family:var(--font);cursor:pointer;font-weight:bold;text-transform:uppercase}
+.btn-restart:active{box-shadow:none;transform:translate(3px,3px)}
+
+/* ── СПЛЭШ ── */
+#splash{position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:999;gap:14px;transition:opacity .3s}
 #splash.hidden{opacity:0;pointer-events:none}
-#splash .logo{font-size:64px;animation:gbboot 0.6s steps(1) infinite}
-@keyframes gbboot{0%{filter:brightness(1)}50%{filter:brightness(0.5)}100%{filter:brightness(1)}}
-#splash h1{font-size:12px;color:var(--gb0);text-align:center;line-height:2;font-weight:bold}
-#splash p{color:var(--gb1);font-size:8px;animation:blink 1s steps(1) infinite}
+#splash h1{font-size:13px;color:var(--brown);text-align:center;line-height:2}
+#splash p{color:var(--text2);font-size:9px;animation:blink 1s steps(1) infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:var(--gb3)}
-::-webkit-scrollbar-thumb{background:var(--gb1);border:1px solid var(--gb0)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--brown3);border:1px solid var(--brown)}
 ```
 
   </style>
 </head>
 <body>
-
 <div id="splash">
-  <div class="logo">🐮</div>
-  <h1>COW FARM GB</h1>
-  <p>▶ PRESS START...</p>
+  <svg width="96" height="80" viewBox="0 0 12 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="0" width="2" height="2" fill="#e8c89a"/><rect x="9" y="0" width="2" height="2" fill="#e8c89a"/>
+    <rect x="0" y="2" width="12" height="5" fill="#f0dcc0"/><rect x="1" y="2" width="2" height="3" fill="#c89a60"/>
+    <rect x="7" y="3" width="2" height="2" fill="#c89a60"/><rect x="2" y="2" width="1" height="1" fill="#1a0a00"/>
+    <rect x="9" y="2" width="1" height="1" fill="#1a0a00"/><rect x="1" y="3" width="3" height="1" fill="#f0b8a0"/>
+    <rect x="2" y="7" width="2" height="3" fill="#e8c89a"/><rect x="8" y="7" width="2" height="3" fill="#e8c89a"/>
+    <rect x="4" y="7" width="1" height="2" fill="#e8c89a"/><rect x="7" y="7" width="1" height="2" fill="#e8c89a"/>
+  </svg>
+  <h1>Молочная ферма</h1>
+  <p>Загрузка...</p>
 </div>
 
 <script>
-// ============================================================
-// config.js
-// ============================================================
-const CONFIG = {
-  SAVE_VERSION: 2,
-  START_GOLD: 800, START_FEED: 15, START_MEDICINE: 5,
-  ACTIONS_PER_DAY: 3,
-  PRICES: {
-    COW:500, FEED_PACK:50, FEED_AMOUNT:10,
-    MED_PACK:60, MED_AMOUNT:5, WATERER:200, VITAMINS:100,
-  },
-  COW_START_STATS:{ fullness:50, health:50, happiness:50 },
-  STAT_MIN:0, STAT_MAX:100,
-  ZONES:{
-    barn:{id:'barn',name:'АМБАР',emoji:'🏠',action:'КОРМИТЬ',actionEmoji:'🌾',
-      effects:{fullness:+10,health:0,happiness:-2},costResource:'feed',costAmount:1},
-    meadow:{id:'meadow',name:'ЛУГ',emoji:'🌿',action:'ГУЛЯТЬ',actionEmoji:'🐾',
-      effects:{fullness:-2,health:0,happiness:+10},costResource:null,costAmount:0},
-    quarantine:{id:'quarantine',name:'КАРАНТИН',emoji:'🏥',action:'ЛЕЧИТЬ',actionEmoji:'💊',
-      effects:{fullness:0,health:+10,happiness:-5},costResource:'medicine',costAmount:1},
-  },
-  ZONE_ORDER:['barn','meadow','quarantine'],
+// ═══════════════════════════════════════════════════════
+// ПАЛИТРЫ И SVG-ГЕНЕРАТОРЫ
+// ═══════════════════════════════════════════════════════
+const PALETTES=[
+  {body:'#f0dcc0',spot:'#5c3d2e',nose:'#f0b8a0',horn:'#e8c89a',name:'рыжая'},
+  {body:'#e8e8e8',spot:'#2a2a2a',nose:'#f0b8a0',horn:'#d4d4d4',name:'чёрно-белая'},
+  {body:'#d4c8a8',spot:'#8b6040',nose:'#e8a898',horn:'#c8b890',name:'бежевая'},
+  {body:'#c8d4b8',spot:'#4a6a3a',nose:'#e8b8a8',horn:'#b8c8a8',name:'зелёная'},
+  {body:'#d4b8c8',spot:'#7a4a6a',nose:'#f0a8b8',horn:'#c8a8b8',name:'розовая'},
+  {body:'#b8c8d4',spot:'#3a5a7a',nose:'#a8c8e0',horn:'#98b8cc',name:'голубая'},
+  {body:'#e8d4a8',spot:'#b86a20',nose:'#f0c090',horn:'#d4b870',name:'золотая'},
+  {body:'#d0d0d0',spot:'#707070',nose:'#f0b8a0',horn:'#c0c0c0',name:'серая'},
+];
+function cowSVG(p,sz=84){
+  const s=sz/12;
+  const r=(x,y,w,h,f)=>`<rect x="${x*s}" y="${y*s}" width="${w*s}" height="${h*s}" fill="${f}"/>`;
+  return `<svg width="${sz}" height="${sz*10/12}" viewBox="0 0 ${12*s} ${10*s}" style="image-rendering:pixelated;display:block" xmlns="http://www.w3.org/2000/svg">
+    ${r(1,0,2,2,p.horn)}${r(9,0,2,2,p.horn)}${r(1,1,1,1,p.body)}${r(10,1,1,1,p.body)}
+    ${r(0,2,12,5,p.body)}${r(1,2,2,3,p.spot)}${r(7,3,2,2,p.spot)}
+    ${r(0,2,4,2,p.body)}${r(8,2,4,2,p.body)}
+    ${r(2,2,1,1,'#1a0a00')}${r(9,2,1,1,'#1a0a00')}${r(1,3,3,1,p.nose)}
+    ${r(2,7,2,3,p.body)}${r(8,7,2,3,p.body)}${r(4,7,1,2,p.body)}${r(7,7,1,2,p.body)}
+    ${r(4,9,1,1,p.nose)}${r(7,9,1,1,p.nose)}
+  </svg>`;
+}
 
-  // Молоко и сезоны
-  MILK_DIVISOR: 10,
-  MILK_PRICE: 3,
-  CURRENT_SEASON: 'summer',   // 'spring' | 'summer' | 'autumn' | 'winter'
-  SEASON_MULTIPLIERS: { spring:1.0, summer:1.2, autumn:1.0, winter:0.8 },
-  SEASON_EMOJI: { spring:'🌸', summer:'☀️', autumn:'🍂', winter:'❄️' },
-
-  // Апгрейды
-  WATERER_HAPPINESS_BONUS: 5,
-  VITAMINS_HEALTH_BONUS: 10,
-  DAILY_DECAY:{ fullness:-8, health:-3, happiness:-5 },
-
-  // Баффы/дебаффы (только отображение, механика позже)
-  BUFFS: {
-    blooming:  { condition:(c)=>c.health>80&&c.happiness>80, label:'✨ В РАСЦВЕТЕ (+10%)', debuff:false },
-    happy:     { condition:(c)=>c.happiness>80&&!(c.health>80), label:'😊 СЧАСТЛИВА (+5%)', debuff:false },
-    sad:       { condition:(c)=>c.happiness<20, label:'😞 ГРУСТНА (-10%)', debuff:true },
-    sick:      { condition:(c)=>c.health<30, label:'🤒 БОЛЬНА (-20%)', debuff:true },
-    hungry:    { condition:(c)=>c.fullness<20, label:'🍽 ГОЛОДНА (-15%)', debuff:true },
-  },
-
-  // Случайные события
-  RANDOM_EVENTS: {
-    CHANCE: 0.15,   // 15% шанс события в конце дня
-    LIST: [
-      {
-        id:'mastitis', type:'local', label:'МАСТИТ',
-        emoji:'🦠',
-        message:(name)=>`У коровы ${name} мастит! Здоровье -15`,
-        apply:(cow, cowMgr)=>{ cowMgr.changeStat(cow,'health',-15); },
-      },
-      {
-        id:'epidemic', type:'global', label:'ЭПИДЕМИЯ',
-        emoji:'☣️',
-        message:()=>`Эпидемия! Все коровы теряют 5 здоровья`,
-        apply:(cow, cowMgr)=>{ cowMgr.changeStat(cow,'health',-5); },
-      },
-      // EXTEND: добавляйте новые события сюда
+// ═══════════════════════════════════════════════════════
+// СЕЗОНЫ — полная система с эффектами
+// ═══════════════════════════════════════════════════════
+const SEASONS={
+  spring:{
+    id:'spring', name:'Весна', icon:'🌸', color:'#c8e8b8', bgClass:'',
+    milkPriceMult:1.1,
+    feedPriceMult:0.9,      // корм дешевле на 10%
+    feedEffectBonus:3,      // кормление даёт +3 доп. сытости (трава свежая)
+    walkHappyBonus:4,       // прогулки приятнее
+    dailyDecay:{fullness:-7,health:-2,happiness:-4}, // мягче
+    events:[
+      {id:'blossom',type:'global',chance:.12,good:true,msg:()=>'Цветёт луг!\nВсе коровы +10 счастья',apply:(c,m)=>m.changeStat(c,'happiness',10)},
+      {id:'rain',type:'global',chance:.08,good:false,msg:()=>'Дожди!\nПрогулки хуже, здоровье -5',apply:(c,m)=>m.changeStat(c,'health',-5)},
     ],
   },
+  summer:{
+    id:'summer', name:'Лето', icon:'☀️', color:'#e8d878', bgClass:'',
+    milkPriceMult:1.2,
+    feedPriceMult:1.0,
+    feedEffectBonus:0,
+    walkHappyBonus:2,
+    dailyDecay:{fullness:-9,health:-3,happiness:-5},
+    events:[
+      {id:'heat',type:'global',chance:.15,good:false,msg:()=>'Жара!\nСытость всех -8',apply:(c,m)=>m.changeStat(c,'fullness',-8)},
+      {id:'goodgrass',type:'global',chance:.12,good:true,msg:()=>'Сочная трава!\nВсе коровы +8 сытости',apply:(c,m)=>m.changeStat(c,'fullness',8)},
+      {id:'happyday',type:'local',chance:.1,good:true,msg:n=>`${n} веселится!\nСчастье +15`,apply:(c,m)=>m.changeStat(c,'happiness',15)},
+    ],
+  },
+  autumn:{
+    id:'autumn', name:'Осень', icon:'🍂', color:'#e8b878', bgClass:'',
+    milkPriceMult:1.15,
+    feedPriceMult:1.15,     // корм дорожает
+    feedEffectBonus:-1,     // кормление чуть хуже
+    walkHappyBonus:1,
+    dailyDecay:{fullness:-8,health:-4,happiness:-6},
+    events:[
+      {id:'wind',type:'global',chance:.12,good:false,msg:()=>'Холодный ветер!\nЗдоровье всех -7',apply:(c,m)=>m.changeStat(c,'health',-7)},
+      {id:'harvest',type:'global',chance:.1,good:true,msg:()=>'Богатый урожай!\nВсе коровы сыты +12',apply:(c,m)=>m.changeStat(c,'fullness',12)},
+      {id:'mastitis',type:'local',chance:.12,good:false,msg:n=>`У ${n} мастит!\nЗдоровье -15`,apply:(c,m)=>m.changeStat(c,'health',-15)},
+    ],
+  },
+  winter:{
+    id:'winter', name:'Зима', icon:'❄️', color:'#b8d4e8', bgClass:'',
+    milkPriceMult:0.8,
+    feedPriceMult:1.35,     // корм сильно дорожает
+    feedEffectBonus:-2,
+    walkHappyBonus:-3,      // прогулки плохо влияют на настроение
+    dailyDecay:{fullness:-10,health:-5,happiness:-7}, // суровее
+    events:[
+      {id:'blizzard',type:'global',chance:.18,good:false,msg:()=>'Метель!\nЗдоровье всех -8, счастье -5',apply:(c,m)=>{m.changeStat(c,'health',-8);m.changeStat(c,'happiness',-5)}},
+      {id:'epidemic',type:'global',chance:.12,good:false,msg:()=>'Эпидемия!\nЗдоровье всех -6',apply:(c,m)=>m.changeStat(c,'health',-6)},
+      {id:'warmbarn',type:'global',chance:.08,good:true,msg:()=>'Уютный амбар!\nВсе коровы +6 здоровья',apply:(c,m)=>m.changeStat(c,'health',6)},
+    ],
+  },
+};
+const SEASON_ORDER=['spring','summer','autumn','winter'];
 
-  COW_NAMES:[
-    'ЗОРЬКА','БУРЁНКА','РОМАШКА','ДОЧКА','СНЕЖКА','МИЛКА','ЗВЁЗДОЧКА',
-    'МУРКА','ЛЯЛЬКА','КРАСОТКА','ПЕСТРУХА','НОЧКА','ЛУНКА','ВАСИЛИСА',
-    'АГАША','ГЛАША','ДУНЯША','ФРОСЯ','МАТРЁША','БЕЛКА',
-    'ДЫМКА','РАДУГА','ЯГОДКА','КНОПКА','ПУГОВКА','ТЕПЛУША',
+// ═══════════════════════════════════════════════════════
+// ЧЕРТЫ КОРОВ — уникальные параметры
+// ═══════════════════════════════════════════════════════
+const TRAITS={
+  // Базовые параметры при создании
+  BREEDS:[
+    {id:'holstein',name:'Голштинская',milkBase:30,milkMax:60,  feedNeed:1.3,healthBase:55,happyBase:50,color:'#3a7aaa'},
+    {id:'jersey',  name:'Джерси',     milkBase:22,milkMax:45,  feedNeed:1.0,healthBase:65,happyBase:60,color:'#8b6040'},
+    {id:'simmental',name:'Симментал', milkBase:25,milkMax:52,  feedNeed:1.1,healthBase:60,happyBase:55,color:'#c49a40'},
+    {id:'ayrshire',name:'Айршир',     milkBase:20,milkMax:40,  feedNeed:0.9,healthBase:70,happyBase:65,color:'#c04040'},
   ],
-  START_COWS: 2,
-};
-window.CONFIG = CONFIG;
-
-// ============================================================
-// eventEmitter.js
-// ============================================================
-class EventEmitter {
-  constructor(){ this._l={}; }
-  on(e,fn){ (this._l[e]||(this._l[e]=[])).push(fn); return this; }
-  off(e,fn){ if(this._l[e]) this._l[e]=this._l[e].filter(l=>l!==fn); return this; }
-  once(e,fn){ const w=(...a)=>{fn(...a);this.off(e,w)}; return this.on(e,w); }
-  emit(e,...a){ (this._l[e]||[]).forEach(fn=>fn(...a)); return this; }
-}
-window.GameBus = new EventEmitter();
-window.EVENTS = {
-  COW_FED:'cow:fed', COW_WALKED:'cow:walked', COW_HEALED:'cow:healed',
-  COW_MOVED:'cow:moved', COW_DIED:'cow:died', COW_BOUGHT:'cow:bought',
-  COW_MILKED:'cow:milked', DAY_END:'day:end', DAY_START:'day:start',
-  SHOP_PURCHASE:'shop:purchase', VITAMINS_USED:'cow:vitamins',
-  WATERER_BOUGHT:'upgrade:waterer', STATS_CHANGED:'stats:changed',
-  UI_REFRESH:'ui:refresh', NOTIFICATION:'ui:notification',
-  MILK_REPORT:'milk:report',       // показать отчёт по дойке
-  RANDOM_EVENT:'game:randomEvent', // сработало случайное событие
+  // Случайные черты характера
+  PERSONALITIES:[
+    {id:'calm',   name:'Спокойная',  happyDecayMod:-1, feedEffMod:0},
+    {id:'active', name:'Активная',   happyDecayMod:+2, feedEffMod:+1},
+    {id:'lazy',   name:'Ленивая',    happyDecayMod:-2, feedEffMod:-1},
+    {id:'glutton',name:'Обжора',     happyDecayMod:0,  feedEffMod:+2, feedCostMod:+1},
+    {id:'gentle', name:'Нежная',     happyDecayMod:0,  healthDecayMod:+1},
+  ],
 };
 
-// ============================================================
-// cowManager.js
-// ============================================================
-class CowManager {
-  constructor(){ this.cows=[]; this._usedNames=new Set(); }
-  load(saved){ this.cows=saved||[]; this.cows.forEach(c=>this._usedNames.add(c.name)); }
-  createCow(zone='barn'){
-    const name=this._randomName(), s=CONFIG.COW_START_STATS;
-    const cow={
-      id:`cow_${Date.now()}_${Math.random().toString(36).slice(2,6)}`,
-      name, zone, fullness:s.fullness, health:s.health, happiness:s.happiness,
-      milkAmount:0, actionsLeft:CONFIG.ACTIONS_PER_DAY, vitaminsUsed:false,
-      // позиция в зоне (случайная, сохраняется)
-      posX: 10+Math.floor(Math.random()*60),
-      posY: 10+Math.floor(Math.random()*60),
+// ═══════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════
+const CONFIG={
+  SAVE_VERSION:5,
+  START_GOLD:1000, START_FEED:22, START_MEDICINE:8,
+  ACTIONS_PER_DAY:3,
+  DAYS_PER_SEASON:7,
+  PRICES:{
+    COW_BASE:400,
+    FEED_PACK:50, FEED_AMOUNT:12,
+    MED_PACK:60, MED_AMOUNT:6,
+    WATERER:200,        // +5 счастья/день
+    BARN_UPGRADE:350,   // +2 к эффекту кормления
+    PASTURE:280,        // +3 к эффекту прогулки
+    VITAMINS:100,       // +15 HP одноразово
+    TONIC:130,          // +20 счастья одноразово
+    BREEDING:500,       // улучшить породу коровы (milkMax +8)
+  },
+  BASE_FEED_EFFECT:14,
+  BASE_WALK_EFFECT:14,
+  BASE_HEAL_EFFECT:14,
+  STAT_MIN:0, STAT_MAX:100,
+  ZONE_ORDER:['barn','meadow','quarantine'],
+  ZONES:{
+    barn:      {id:'barn',      name:'Амбар',    action:'Покормить', costResource:'feed',     costAmount:1},
+    meadow:    {id:'meadow',    name:'Луг',      action:'Погулять',  costResource:null,        costAmount:0},
+    quarantine:{id:'quarantine',name:'Карантин', action:'Полечить',  costResource:'medicine', costAmount:1},
+  },
+  WATERER_BONUS:5,
+  BUFFS:{
+    prime:   {cond:c=>c.health>80&&c.happiness>80&&c.fullness>70, label:'В расцвете сил',  debuff:false, milkMod:1.15},
+    happy:   {cond:c=>c.happiness>80&&c.health>60,                label:'Счастлива',       debuff:false, milkMod:1.08},
+    sad:     {cond:c=>c.happiness<25,                             label:'Грустна',         debuff:true,  milkMod:0.88},
+    sick:    {cond:c=>c.health<30,                                label:'Больна',          debuff:true,  milkMod:0.78},
+    hungry:  {cond:c=>c.fullness<20,                             label:'Голодна',         debuff:true,  milkMod:0.82},
+    old:     {cond:c=>c.age>=20,                                  label:'Пожилая',         debuff:true,  milkMod:0.92},
+  },
+  COW_NAMES:['Зорька','Бурёнка','Ромашка','Дочка','Снежка','Милка','Звёздочка','Мурка','Лялька',
+    'Красотка','Пеструха','Ночка','Лунка','Василиса','Агаша','Глаша','Дуняша','Фрося','Матрёша',
+    'Белка','Дымка','Радуга','Ягодка','Кнопка','Пуговка','Теплуша','Беляна','Чернуша'],
+  START_COWS:2,
+};
+window.CONFIG=CONFIG;
+
+// ═══════════════════════════════════════════════════════
+// EVENT BUS
+// ═══════════════════════════════════════════════════════
+class EE{constructor(){this._l={}}on(e,f){(this._l[e]||(this._l[e]=[])).push(f);return this}
+  off(e,f){if(this._l[e])this._l[e]=this._l[e].filter(l=>l!==f);return this}
+  emit(e,...a){(this._l[e]||[]).forEach(f=>f(...a));return this}}
+window.GameBus=new EE();
+const EV={REFRESH:'r',COW_DIED:'cd',COW_BOUGHT:'cb',NOTIF:'n',MILK_REPORT:'mr',GAME_OVER:'go',DAY_TRANSITION:'dt'};
+window.EV=EV;
+
+// ═══════════════════════════════════════════════════════
+// STATE — единый объект состояния
+// ═══════════════════════════════════════════════════════
+const STATE={
+  day:1,
+  seasonIndex:0,   // 0=spring,1=summer,2=autumn,3=winter
+  seasonDay:1,     // день внутри сезона
+  gold:CONFIG.START_GOLD,
+  feed:CONFIG.START_FEED,
+  medicine:CONFIG.START_MEDICINE,
+  upgrades:{waterer:false,barnUpgrade:0,pasture:false},
+  cows:[],
+  _usedNames:new Set(),
+  _pending:false,
+
+  get season(){ return SEASONS[SEASON_ORDER[this.seasonIndex]]; },
+
+  // ── Создать корову ──
+  makeCow(zone='barn', breedId=null){
+    const name=this._rndName();
+    const breed=breedId ? TRAITS.BREEDS.find(b=>b.id===breedId) : TRAITS.BREEDS[Math.floor(Math.random()*TRAITS.BREEDS.length)];
+    const pers=TRAITS.PERSONALITIES[Math.floor(Math.random()*TRAITS.PERSONALITIES.length)];
+    const c={
+      id:`c_${Date.now()}_${Math.random().toString(36).slice(2,5)}`,
+      name, zone,
+      breed:breed.id, pers:pers.id,
+      pal:Math.floor(Math.random()*PALETTES.length),
+      health:breed.healthBase, happiness:breed.happyBase, fullness:60,
+      milkLevel:0,          // 0-5: уровень улучшения
+      age:0,                // дней прожито
+      actionsLeft:CONFIG.ACTIONS_PER_DAY,
+      vitaminsUsed:false,
+      tonicUsed:false,
+      posX:15+Math.floor(Math.random()*65),
+      posY:10+Math.floor(Math.random()*60),
     };
-    this.cows.push(cow); this._usedNames.add(name);
-    GameBus.emit(EVENTS.COW_BOUGHT,cow); GameBus.emit(EVENTS.UI_REFRESH); return cow;
-  }
-  getCow(id){ return this.cows.find(c=>c.id===id); }
-  getCowsInZone(z){ return this.cows.filter(c=>c.zone===z); }
-  changeStat(cow,stat,delta){
-    cow[stat]=Math.max(CONFIG.STAT_MIN,Math.min(CONFIG.STAT_MAX,(cow[stat]||0)+delta));
-  }
-  applyZoneEffects(cow,zoneId){
-    const z=CONFIG.ZONES[zoneId]; if(!z) return;
-    Object.entries(z.effects).forEach(([s,d])=>this.changeStat(cow,s,d));
-    GameBus.emit(EVENTS.STATS_CHANGED,cow);
-  }
-  moveCow(cow,targetZoneId){
-    if(cow.actionsLeft<=0||cow.zone===targetZoneId) return false;
-    cow.zone=targetZoneId; cow.actionsLeft--;
-    // Новая случайная позиция в новой зоне
-    cow.posX=10+Math.floor(Math.random()*60);
-    cow.posY=10+Math.floor(Math.random()*60);
-    GameBus.emit(EVENTS.COW_MOVED,cow,targetZoneId); GameBus.emit(EVENTS.UI_REFRESH); return true;
-  }
-  applyVitamins(cow){
-    if(cow.vitaminsUsed) return false;
-    this.changeStat(cow,'health',CONFIG.VITAMINS_HEALTH_BONUS); cow.vitaminsUsed=true;
-    GameBus.emit(EVENTS.VITAMINS_USED,cow); GameBus.emit(EVENTS.STATS_CHANGED,cow);
-    GameBus.emit(EVENTS.UI_REFRESH); return true;
-  }
-  applyDailyDecay(){
-    const dead=[];
-    this.cows.forEach(cow=>{
-      Object.entries(CONFIG.DAILY_DECAY).forEach(([s,d])=>this.changeStat(cow,s,d));
-      if(cow.health<=CONFIG.STAT_MIN) dead.push(cow);
-    });
-    dead.forEach(cow=>this._removeCow(cow)); return dead;
-  }
-  startNewDay(upgrades){
-    this.cows.forEach(cow=>{
-      cow.actionsLeft=CONFIG.ACTIONS_PER_DAY;
-      if(upgrades&&upgrades.waterer) this.changeStat(cow,'happiness',CONFIG.WATERER_HAPPINESS_BONUS);
-      // EXTEND: сезонные бонусы здесь
-    });
-    GameBus.emit(EVENTS.DAY_START); GameBus.emit(EVENTS.UI_REFRESH);
-  }
-  milkAll(){
-    const report=[];
-    this.cows.forEach(cow=>{
-      const milk=Math.floor((cow.fullness+cow.health+cow.happiness)/CONFIG.MILK_DIVISOR);
-      cow.milkAmount=milk;
-      report.push({name:cow.name, milk});
-      GameBus.emit(EVENTS.COW_MILKED,cow,milk);
-    });
-    this.cows.forEach(cow=>{cow.milkAmount=0;});
-    return report;
-  }
-  allActionsSpent(){ return this.cows.length>0&&this.cows.every(c=>c.actionsLeft<=0); }
-  serialize(){ return this.cows; }
-  getBuffs(cow){
-    return Object.values(CONFIG.BUFFS).filter(b=>b.condition(cow));
-  }
-  _removeCow(cow){
-    this.cows=this.cows.filter(c=>c.id!==cow.id);
-    GameBus.emit(EVENTS.COW_DIED,cow); GameBus.emit(EVENTS.UI_REFRESH);
-  }
-  _randomName(){
-    const pool=CONFIG.COW_NAMES.filter(n=>!this._usedNames.has(n));
-    if(!pool.length) return CONFIG.COW_NAMES[Math.floor(Math.random()*CONFIG.COW_NAMES.length)]+' '+Math.floor(Math.random()*100);
-    return pool[Math.floor(Math.random()*pool.length)];
-  }
-}
-window.cowManager = new CowManager();
+    this.cows.push(c); this._usedNames.add(name);
+    GameBus.emit(EV.REFRESH); return c;
+  },
 
-// ============================================================
-// economyManager.js
-// ============================================================
-class EconomyManager {
-  constructor(){
-    this.gold=CONFIG.START_GOLD; this.feed=CONFIG.START_FEED;
-    this.medicine=CONFIG.START_MEDICINE; this.upgrades={waterer:false};
-  }
-  load(data){
-    if(!data) return;
-    this.gold=data.gold??this.gold; this.feed=data.feed??this.feed;
-    this.medicine=data.medicine??this.medicine;
-    this.upgrades={...this.upgrades,...(data.upgrades||{})};
-  }
-  // Цена молока с сезонным множителем
-  getMilkPrice(){
-    const mult=CONFIG.SEASON_MULTIPLIERS[CONFIG.CURRENT_SEASON]??1.0;
-    return Math.round(CONFIG.MILK_PRICE * mult * 10)/10;
-  }
-  canAfford(r,a=1){ return this[r]>=a; }
-  spend(r,a=1){ if(!this.canAfford(r,a)) return false; this[r]-=a; GameBus.emit(EVENTS.STATS_CHANGED); return true; }
-  addGold(a){ this.gold+=a; GameBus.emit(EVENTS.STATS_CHANGED); }
-  sellMilk(totalMilk){
-    const price=this.getMilkPrice();
+  cow(id){ return this.cows.find(c=>c.id===id); },
+  cowsIn(z){ return this.cows.filter(c=>c.zone===z); },
+
+  clamp(v){ return Math.max(CONFIG.STAT_MIN,Math.min(CONFIG.STAT_MAX,v)); },
+  stat(c,s,d){ c[s]=this.clamp((c[s]||0)+d); },
+
+  // ── Молоко коровы ──
+  milkOf(c){
+    const breed=TRAITS.BREEDS.find(b=>b.id===c.breed);
+    const pot=this.milkPotential(c);
+    const ratio=(c.fullness+c.health+c.happiness)/300; // 0..1
+    let raw=Math.round(pot * ratio);
+    // Баффы
+    const buffs=this.getBuffs(c);
+    buffs.forEach(b=>{ raw=Math.round(raw*b.milkMod); });
+    return Math.max(0,raw);
+  },
+  milkPotential(c){
+    const breed=TRAITS.BREEDS.find(b=>b.id===c.breed)||TRAITS.BREEDS[0];
+    return breed.milkBase + c.milkLevel*Math.round((breed.milkMax-breed.milkBase)/5);
+  },
+
+  getBuffs(c){ return Object.values(CONFIG.BUFFS).filter(b=>b.cond(c)); },
+
+  // ── Цена молока ──
+  milkPrice(){ return +(CONFIG.PRICES ? (3 * this.season.milkPriceMult).toFixed(1) : 3); },
+
+  // ── Действие в зоне ──
+  doAction(cowId, zoneId){
+    const c=this.cow(cowId), z=CONFIG.ZONES[zoneId];
+    if(!c||!z) return{ok:false,reason:'Не найдено'};
+    if(c.zone!==zoneId) return{ok:false,reason:'Корова не здесь'};
+    if(c.actionsLeft<=0) return{ok:false,reason:'Действий нет'};
+    if(z.costResource){
+      const cost=z.costAmount*(zoneId==='barn'?1:1);
+      if(this[z.costResource]<cost) return{ok:false,reason:'Не хватает '+(z.costResource==='feed'?'корма':'лекарств')};
+      this[z.costResource]-=cost;
+    }
+    const breed=TRAITS.BREEDS.find(b=>b.id===c.breed)||TRAITS.BREEDS[0];
+    const pers=TRAITS.PERSONALITIES.find(p=>p.id===c.pers)||TRAITS.PERSONALITIES[0];
+    const sn=this.season;
+    if(zoneId==='barn'){
+      let eff=CONFIG.BASE_FEED_EFFECT + sn.feedEffectBonus + (pers.feedEffMod||0) + (this.upgrades.barnUpgrade||0)*2;
+      // Обжора ест больше
+      if(pers.id==='glutton'&&this.feed>0){this.feed-=1;}
+      this.stat(c,'fullness',eff);
+      this.stat(c,'happiness',-2);
+    } else if(zoneId==='meadow'){
+      let happ=CONFIG.BASE_WALK_EFFECT + (sn.walkHappyBonus||0) + (this.upgrades.pasture?3:0);
+      let hpBonus=1;
+      this.stat(c,'happiness',happ);
+      this.stat(c,'health',hpBonus);
+      this.stat(c,'fullness',-3+(sn.walkHappyBonus<0?-2:0));
+    } else if(zoneId==='quarantine'){
+      this.stat(c,'health',CONFIG.BASE_HEAL_EFFECT);
+      this.stat(c,'happiness',-5);
+    }
+    c.actionsLeft--;
+    GameBus.emit(EV.REFRESH);
+    this._autoEndCheck();
+    return{ok:true};
+  },
+
+  moveCow(cowId, targetZone){
+    const c=this.cow(cowId);
+    if(!c) return{ok:false,reason:'Не найдена'};
+    if(c.actionsLeft<=0) return{ok:false,reason:'Нет действий'};
+    if(c.zone===targetZone) return{ok:false,reason:'Уже здесь'};
+    c.zone=targetZone; c.actionsLeft--;
+    c.posX=15+Math.floor(Math.random()*65); c.posY=10+Math.floor(Math.random()*60);
+    GameBus.emit(EV.REFRESH);
+    this._autoEndCheck();
+    return{ok:true};
+  },
+
+  useVitamins(cowId){
+    const c=this.cow(cowId);
+    if(!c) return{ok:false,reason:'Не найдена'};
+    if(c.vitaminsUsed) return{ok:false,reason:'Уже использованы сегодня'};
+    if(this.gold<CONFIG.PRICES.VITAMINS) return{ok:false,reason:'Не хватает золота'};
+    this.gold-=CONFIG.PRICES.VITAMINS; this.stat(c,'health',15); c.vitaminsUsed=true;
+    GameBus.emit(EV.REFRESH); return{ok:true};
+  },
+
+  useTonic(cowId){
+    const c=this.cow(cowId);
+    if(!c) return{ok:false,reason:'Не найдена'};
+    if(c.tonicUsed) return{ok:false,reason:'Уже использован сегодня'};
+    if(this.gold<CONFIG.PRICES.TONIC) return{ok:false,reason:'Не хватает золота'};
+    this.gold-=CONFIG.PRICES.TONIC; this.stat(c,'happiness',20); c.tonicUsed=true;
+    GameBus.emit(EV.REFRESH); return{ok:true};
+  },
+
+  buyBreeding(cowId){
+    const c=this.cow(cowId);
+    if(!c) return{ok:false,reason:'Не найдена'};
+    if(c.milkLevel>=5) return{ok:false,reason:'Максимальный уровень'};
+    if(this.gold<CONFIG.PRICES.BREEDING) return{ok:false,reason:'Не хватает золота'};
+    this.gold-=CONFIG.PRICES.BREEDING; c.milkLevel++;
+    GameBus.emit(EV.REFRESH); return{ok:true};
+  },
+
+  buy(what){
+    const p=CONFIG.PRICES;
+    if(what==='feed'){
+      const price=Math.round(p.FEED_PACK*this.season.feedPriceMult);
+      if(this.gold<price) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=price; this.feed+=p.FEED_AMOUNT; return{ok:true};
+    }
+    if(what==='medicine'){
+      if(this.gold<p.MED_PACK) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=p.MED_PACK; this.medicine+=p.MED_AMOUNT; return{ok:true};
+    }
+    if(what==='cow'){
+      if(this.gold<p.COW_BASE) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=p.COW_BASE; this.makeCow('barn'); return{ok:true};
+    }
+    if(what==='waterer'){
+      if(this.upgrades.waterer) return{ok:false,reason:'Уже куплено'};
+      if(this.gold<p.WATERER) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=p.WATERER; this.upgrades.waterer=true; return{ok:true};
+    }
+    if(what==='barn'){
+      if(this.upgrades.barnUpgrade>=3) return{ok:false,reason:'Максимальный уровень'};
+      const cost=p.BARN_UPGRADE*(this.upgrades.barnUpgrade+1);
+      if(this.gold<cost) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=cost; this.upgrades.barnUpgrade=(this.upgrades.barnUpgrade||0)+1; return{ok:true};
+    }
+    if(what==='pasture'){
+      if(this.upgrades.pasture) return{ok:false,reason:'Уже куплено'};
+      if(this.gold<p.PASTURE) return{ok:false,reason:'Не хватает золота'};
+      this.gold-=p.PASTURE; this.upgrades.pasture=true; return{ok:true};
+    }
+    return{ok:false,reason:'Неизвестно'};
+  },
+
+  // ── Конец дня ──
+  endDay(){
+    if(this._pending) return;
+    this._pending=true;
+    // Дойка
+    const rows=this.cows.map(c=>({name:c.name,milk:this.milkOf(c),pot:this.milkPotential(c)}));
+    const totalMilk=rows.reduce((s,r)=>s+r.milk,0);
+    const price=this.milkPrice();
     const earned=Math.floor(totalMilk*price);
-    this.addGold(earned); return {earned, price};
-  }
-  buyFeed(){ if(!this.spend('gold',CONFIG.PRICES.FEED_PACK)) return false; this.feed+=CONFIG.PRICES.FEED_AMOUNT; GameBus.emit(EVENTS.SHOP_PURCHASE,'feed'); return true; }
-  buyMedicine(){ if(!this.spend('gold',CONFIG.PRICES.MED_PACK)) return false; this.medicine+=CONFIG.PRICES.MED_AMOUNT; GameBus.emit(EVENTS.SHOP_PURCHASE,'medicine'); return true; }
-  buyWaterer(){ if(this.upgrades.waterer||!this.spend('gold',CONFIG.PRICES.WATERER)) return false; this.upgrades.waterer=true; GameBus.emit(EVENTS.WATERER_BOUGHT); GameBus.emit(EVENTS.SHOP_PURCHASE,'waterer'); return true; }
-  buyCow(){ return this.spend('gold',CONFIG.PRICES.COW); }
-  buyVitamins(){ return this.spend('gold',CONFIG.PRICES.VITAMINS); }
-  serialize(){ return{gold:this.gold,feed:this.feed,medicine:this.medicine,upgrades:this.upgrades}; }
-}
-window.economyManager = new EconomyManager();
-
-// ============================================================
-// saveManager.js
-// ============================================================
-class SaveManager {
-  constructor(){ this.KEY='farm_save_v'+CONFIG.SAVE_VERSION; }
-  save(){
-    try{
-      localStorage.setItem(this.KEY,JSON.stringify({
-        version:CONFIG.SAVE_VERSION,
-        cows:cowManager.serialize(),
-        economy:economyManager.serialize(),
-        action:actionManager.serialize(),
-      }));
-    }catch(e){ console.warn('Save failed:',e); }
-  }
-  load(){ try{ const r=localStorage.getItem(this.KEY); return r?JSON.parse(r):null; }catch(e){return null;} }
-  clear(){ localStorage.removeItem(this.KEY); }
-  bindAutoSave(){
-    const s=()=>this.save();
-    [EVENTS.COW_FED,EVENTS.COW_WALKED,EVENTS.COW_HEALED,EVENTS.COW_MOVED,
-     EVENTS.COW_BOUGHT,EVENTS.COW_DIED,EVENTS.VITAMINS_USED,
-     EVENTS.WATERER_BOUGHT,EVENTS.SHOP_PURCHASE].forEach(ev=>GameBus.on(ev,s));
-  }
-}
-window.saveManager = new SaveManager();
-
-// ============================================================
-// eventManager.js — случайные события
-// ============================================================
-class EventManager {
-  // Вызывается в конце дня, после дойки
-  rollRandomEvent(){
-    if(Math.random()>CONFIG.RANDOM_EVENTS.CHANCE) return null;
-    if(!cowManager.cows.length) return null;
-
-    const list=CONFIG.RANDOM_EVENTS.LIST;
-    const event=list[Math.floor(Math.random()*list.length)];
-
-    if(event.type==='local'){
-      const cow=cowManager.cows[Math.floor(Math.random()*cowManager.cows.length)];
-      event.apply(cow, cowManager);
-      const msg=event.message(cow.name);
-      GameBus.emit(EVENTS.NOTIFICATION, event.emoji+' '+msg, 'danger');
-      GameBus.emit(EVENTS.RANDOM_EVENT, event, [cow]);
-    } else if(event.type==='global'){
-      cowManager.cows.forEach(cow=>event.apply(cow, cowManager));
-      const msg=event.message();
-      GameBus.emit(EVENTS.NOTIFICATION, event.emoji+' '+msg, 'danger');
-      GameBus.emit(EVENTS.RANDOM_EVENT, event, cowManager.cows);
+    this.gold+=earned;
+    // Случайное событие
+    let eventMsg=null, eventGood=false;
+    const sn=this.season;
+    const evPool=sn.events||[];
+    for(const ev of evPool){
+      if(Math.random()<ev.chance){
+        if(ev.type==='local'&&this.cows.length){
+          const target=this.cows[Math.floor(Math.random()*this.cows.length)];
+          ev.apply(target,this);
+          eventMsg=ev.msg(target.name); eventGood=ev.good;
+        } else {
+          this.cows.forEach(c=>ev.apply(c,this));
+          eventMsg=ev.msg(); eventGood=ev.good;
+        }
+        break;
+      }
     }
-
-    // Проверить смерти после события
-    const dead=cowManager.cows.filter(c=>c.health<=CONFIG.STAT_MIN);
-    dead.forEach(cow=>{
-      cowManager.cows=cowManager.cows.filter(c=>c.id!==cow.id);
-      GameBus.emit(EVENTS.COW_DIED,cow);
+    // Ежедневное увядание + возраст
+    const dec=sn.dailyDecay;
+    this.cows.forEach(c=>{
+      const pers=TRAITS.PERSONALITIES.find(p=>p.id===c.pers)||{};
+      this.stat(c,'fullness',dec.fullness);
+      this.stat(c,'health',dec.health+(pers.healthDecayMod||0)*-1);
+      this.stat(c,'happiness',dec.happiness+(pers.happyDecayMod||0)*-1);
+      c.age=(c.age||0)+1;
+      c.vitaminsUsed=false; c.tonicUsed=false;
     });
-
-    GameBus.emit(EVENTS.UI_REFRESH);
-    return event;
-  }
-}
-window.eventManager = new EventManager();
-
-// ============================================================
-// actionManager.js
-// ============================================================
-class ActionManager {
-  constructor(){ this.day=1; }
-  load(data){ this.day=data?.day??1; }
-  doZoneAction(cowId,zoneId){
-    const cow=cowManager.getCow(cowId), zone=CONFIG.ZONES[zoneId];
-    if(!cow||!zone) return{ok:false,reason:'Корова или зона не найдена'};
-    if(cow.zone!==zoneId) return{ok:false,reason:'Корова не в этой зоне'};
-    if(cow.actionsLeft<=0) return{ok:false,reason:'Действия закончились'};
-    if(zone.costResource&&zone.costAmount>0){
-      if(!economyManager.spend(zone.costResource,zone.costAmount))
-        return{ok:false,reason:'Не хватает '+(zone.costResource==='feed'?'корма':'лекарств')};
+    // Автопоилка
+    if(this.upgrades.waterer) this.cows.forEach(c=>this.stat(c,'happiness',CONFIG.WATERER_BONUS));
+    // Гибель
+    const dead=this.cows.filter(c=>c.health<=0);
+    dead.forEach(c=>{
+      this.cows=this.cows.filter(x=>x.id!==c.id);
+      GameBus.emit(EV.COW_DIED,c);
+    });
+    // Прогресс дня/сезона
+    const oldSeason=SEASON_ORDER[this.seasonIndex];
+    this.seasonDay++;
+    if(this.seasonDay>CONFIG.DAYS_PER_SEASON){
+      this.seasonDay=1;
+      this.seasonIndex=(this.seasonIndex+1)%4;
     }
-    cowManager.applyZoneEffects(cow,zoneId); cow.actionsLeft--;
-    GameBus.emit({barn:EVENTS.COW_FED,meadow:EVENTS.COW_WALKED,quarantine:EVENTS.COW_HEALED}[zoneId]||EVENTS.STATS_CHANGED,cow);
-    GameBus.emit(EVENTS.UI_REFRESH); this._checkEndOfDay(); return{ok:true};
-  }
-  moveCow(cowId,targetZoneId){
-    const cow=cowManager.getCow(cowId);
-    if(!cow) return{ok:false,reason:'Корова не найдена'};
-    if(cow.actionsLeft<=0) return{ok:false,reason:'Действия закончились'};
-    if(cow.zone===targetZoneId) return{ok:false,reason:'Корова уже здесь'};
-    if(!cowManager.moveCow(cow,targetZoneId)) return{ok:false,reason:'Не удалось переместить'};
-    this._checkEndOfDay(); return{ok:true};
-  }
-  buyCow(){ if(!economyManager.buyCow()) return{ok:false,reason:'Не хватает золота'}; cowManager.createCow('barn'); return{ok:true}; }
-  buyFeed(){ if(!economyManager.buyFeed()) return{ok:false,reason:'Не хватает золота'}; GameBus.emit(EVENTS.UI_REFRESH); return{ok:true}; }
-  buyMedicine(){ if(!economyManager.buyMedicine()) return{ok:false,reason:'Не хватает золота'}; GameBus.emit(EVENTS.UI_REFRESH); return{ok:true}; }
-  buyWaterer(){
-    if(!economyManager.buyWaterer()) return{ok:false,reason:economyManager.upgrades.waterer?'Уже куплено':'Не хватает золота'};
-    GameBus.emit(EVENTS.UI_REFRESH); return{ok:true};
-  }
-  buyVitamins(cowId){
-    const cow=cowManager.getCow(cowId);
-    if(!cow) return{ok:false,reason:'Корова не найдена'};
-    if(cow.vitaminsUsed) return{ok:false,reason:'Витамины уже использованы'};
-    if(!economyManager.buyVitamins()) return{ok:false,reason:'Не хватает золота'};
-    cowManager.applyVitamins(cow); return{ok:true};
-  }
-  forceEndDay(){ this._endDay(); }
-  serialize(){ return{day:this.day}; }
-  _checkEndOfDay(){ if(cowManager.allActionsSpent()) setTimeout(()=>this._endDay(),400); }
-  _endDay(){
-    GameBus.emit(EVENTS.DAY_END,this.day);
-
-    // 1. Дойка
-    const milkReport=cowManager.milkAll();
-    const totalMilk=milkReport.reduce((s,r)=>s+r.milk,0);
-    const {earned, price}=economyManager.sellMilk(totalMilk);
-
-    // 2. Случайное событие (до увядания)
-    eventManager.rollRandomEvent();
-
-    // 3. Увядание
-    const dead=cowManager.applyDailyDecay();
-
-    // 4. Показать модальный отчёт по дойке
-    GameBus.emit(EVENTS.MILK_REPORT, {
-      day: this.day,
-      rows: milkReport,
-      totalMilk,
-      price,
-      earned,
-      dead,
-    });
-
-    // 5. Новый день стартует ПОСЛЕ закрытия отчёта (см. uiManager)
-    this._pendingDay=true;
-  }
-  _startNewDay(){
+    const newSeason=SEASON_ORDER[this.seasonIndex];
+    const seasonChanged=oldSeason!==newSeason;
     this.day++;
-    cowManager.startNewDay(economyManager.upgrades);
-    GameBus.emit(EVENTS.UI_REFRESH);
-    saveManager.save();
-    this._pendingDay=false;
-  }
+    // Начало нового дня
+    this.cows.forEach(c=>{ c.actionsLeft=CONFIG.ACTIONS_PER_DAY; });
+    // Репорт
+    GameBus.emit(EV.MILK_REPORT,{rows,totalMilk,price,earned,eventMsg,eventGood,dead,
+      day:this.day-1, seasonChanged, newSeason:SEASONS[newSeason]});
+  },
+
+  afterReport(){
+    this._pending=false;
+    saveState();
+    GameBus.emit(EV.REFRESH);
+  },
+
+  allActionsSpent(){ return this.cows.length>0&&this.cows.every(c=>c.actionsLeft<=0); },
+
+  _autoEndCheck(){
+    if(this.allActionsSpent()) setTimeout(()=>this.endDay(),400);
+  },
+
+  _rndName(){
+    const pool=CONFIG.COW_NAMES.filter(n=>!this._usedNames.has(n));
+    if(!pool.length) return CONFIG.COW_NAMES[Math.floor(Math.random()*CONFIG.COW_NAMES.length)]+' '+(Math.floor(Math.random()*99)+1);
+    return pool[Math.floor(Math.random()*pool.length)];
+  },
+
+  serialize(){
+    return{
+      v:CONFIG.SAVE_VERSION, day:this.day, seasonIndex:this.seasonIndex, seasonDay:this.seasonDay,
+      gold:this.gold, feed:this.feed, medicine:this.medicine, upgrades:this.upgrades,
+      cows:this.cows, usedNames:[...this._usedNames],
+    };
+  },
+  load(d){
+    if(!d||d.v!==CONFIG.SAVE_VERSION) return false;
+    Object.assign(this,{day:d.day,seasonIndex:d.seasonIndex,seasonDay:d.seasonDay,
+      gold:d.gold,feed:d.feed,medicine:d.medicine,upgrades:{...this.upgrades,...d.upgrades}});
+    this.cows=d.cows||[];
+    this._usedNames=new Set(d.usedNames||[]);
+    this.cows.forEach(c=>{
+      if(c.milkLevel===undefined) c.milkLevel=0;
+      if(c.age===undefined) c.age=0;
+      if(c.breed===undefined) c.breed='holstein';
+      if(c.pers===undefined) c.pers='calm';
+      if(c.pal===undefined) c.pal=Math.floor(Math.random()*PALETTES.length);
+    });
+    return true;
+  },
+};
+window.STATE=STATE;
+
+function saveState(){
+  try{ localStorage.setItem('farm5',JSON.stringify(STATE.serialize())); }catch(e){}
 }
-window.actionManager = new ActionManager();
+function loadState(){
+  try{ const r=localStorage.getItem('farm5'); return r?JSON.parse(r):null; }catch(e){return null;}
+}
+function clearState(){ localStorage.removeItem('farm5'); }
 
-// ============================================================
-// uiManager.js
-// ============================================================
-class UIManager {
-  constructor(){ this.currentZoneIndex=0; this.touchStartX=0; }
-  init(){ this._buildSkeleton(); this._bindEvents(); this._bindSwipe(); this.refresh(); }
-  refresh(){ this._renderHeader(); this._renderZoneBar(); this._renderCowField(); }
+// ═══════════════════════════════════════════════════════
+// UI MANAGER
+// ═══════════════════════════════════════════════════════
+const UI={
+  zi:0, tx:0,
 
-  _buildSkeleton(){
-    document.body.innerHTML=`
-      <div id="app">
-        <header id="header"></header>
-        <div id="zone-bar"></div>
-        <main id="cow-list"></main>
-        <footer id="footer">
-          <button id="btn-next-day" class="btn btn-day">NEXT DAY ▶</button>
-          <button id="btn-shop" class="btn btn-shop">🏪 SHOP</button>
-        </footer>
-        <div id="modal-cow" class="modal hidden"></div>
-        <div id="modal-shop" class="modal hidden"></div>
-        <div id="modal-move" class="modal hidden"></div>
-        <div id="modal-milk" class="modal hidden"></div>
-        <div id="notification-area"></div>
-      </div>`;
-    document.getElementById('btn-shop').addEventListener('click',()=>this._openShop());
-    document.getElementById('btn-next-day').addEventListener('click',()=>actionManager.forceEndDay());
-  }
+  init(){
+    this._skeleton();
+    GameBus.on(EV.REFRESH,()=>this.render());
+    GameBus.on(EV.COW_DIED,c=>this._notif(`${c.name} умерла...`,'danger'));
+    GameBus.on(EV.MILK_REPORT,d=>this._milkReport(d));
+    this._swipe();
+    this.render();
+  },
 
-  _renderHeader(){
-    const e=economyManager;
-    const season=CONFIG.CURRENT_SEASON;
-    const sEmoji=CONFIG.SEASON_EMOJI[season]||'🌱';
-    const price=e.getMilkPrice();
+  render(){
+    this._header();
+    this._zonebar();
+    this._field();
+  },
+
+  _skeleton(){
+    document.body.innerHTML=`<div id="app">
+      <header id="header"></header>
+      <div id="zone-bar"></div>
+      <main id="cow-list"></main>
+      <footer id="footer">
+        <button id="btn-day" class="btn btn-day">Завершить день</button>
+        <button id="btn-shop" class="btn btn-shop">Магазин</button>
+      </footer>
+      <div id="m-cow"  class="modal hidden"></div>
+      <div id="m-shop" class="modal hidden"></div>
+      <div id="m-move" class="modal hidden"></div>
+      <div id="m-milk" class="modal hidden"></div>
+      <div id="notif-area"></div>
+      <div id="day-overlay"></div>
+      <div id="gameover" class="hidden"></div>
+    </div>`;
+    document.getElementById('btn-shop').onclick=()=>this._shop('supplies');
+    document.getElementById('btn-day').onclick=()=>{ if(!STATE._pending) STATE.endDay(); };
+  },
+
+  _header(){
+    const s=STATE, sn=s.season;
+    const feedPrice=Math.round(CONFIG.PRICES.FEED_PACK*sn.feedPriceMult);
+    const best=parseInt(localStorage.getItem('farm_best')||'0');
     document.getElementById('header').innerHTML=`
       <div class="hud">
-        <span class="hud-item">💰 ${e.gold}</span>
-        <span class="hud-item">🌾 ${e.feed}</span>
-        <span class="hud-item">💊 ${e.medicine}</span>
-        <span class="hud-item day-badge">DAY ${actionManager.day}</span>
+        <span class="hud-item">
+          <svg class="hud-icon" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="6" height="1" fill="#d4a843"/><rect x="0" y="2" width="10" height="6" fill="#d4a843"/><rect x="2" y="9" width="6" height="1" fill="#d4a843"/><rect x="4" y="3" width="2" height="4" fill="#a87820"/><rect x="3" y="4" width="4" height="2" fill="#a87820"/></svg>
+          ${s.gold}
+        </span>
+        <span class="hud-item">
+          <svg class="hud-icon" viewBox="0 0 10 12" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="0" width="2" height="2" fill="#d4a843"/><rect x="2" y="2" width="2" height="2" fill="#d4a843"/><rect x="6" y="2" width="2" height="2" fill="#d4a843"/><rect x="3" y="4" width="4" height="2" fill="#d4a843"/><rect x="4" y="6" width="2" height="6" fill="#8b6a2a"/></svg>
+          ${s.feed}
+        </span>
+        <span class="hud-item">
+          <svg class="hud-icon" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="3" width="10" height="4" fill="#d45c5c"/><rect x="3" y="0" width="4" height="10" fill="#d45c5c"/><rect x="1" y="4" width="8" height="2" fill="#f08888"/><rect x="4" y="1" width="2" height="8" fill="#f08888"/></svg>
+          ${s.medicine}
+        </span>
+        <span class="hud-item day-badge">День ${s.day}</span>
       </div>
-      <div style="display:flex;gap:6px;margin-top:4px">
-        <div class="season-badge">${sEmoji} ${season.toUpperCase()} · 🥛${price}G</div>
-        ${e.upgrades.waterer?'<div class="upgrade-badge">🚰 WATERER</div>':''}
+      <div class="hud-row2">
+        <span class="stag" style="background:${sn.color};color:var(--brown)">${sn.icon} ${sn.name} · д.${s.seasonDay}/${CONFIG.DAYS_PER_SEASON}</span>
+        <span class="stag" style="background:var(--gold2);color:var(--brown)">молоко ${s.milkPrice().toFixed(1)} з</span>
+        <span class="stag" style="background:var(--sand);color:var(--brown)">корм ${feedPrice} з</span>
+        ${s.upgrades.waterer?'<span class="stag" style="background:var(--mint);color:var(--brown)">Поилка</span>':''}
+        ${s.upgrades.barnUpgrade?`<span class="stag" style="background:#e8d8c0;color:var(--brown)">Амбар ${s.upgrades.barnUpgrade}</span>`:''}
+        ${s.upgrades.pasture?'<span class="stag" style="background:#d8ecc8;color:var(--brown)">Луг+</span>':''}
+        ${best>0?`<span class="stag" style="background:var(--lavender);color:var(--brown)">Рекорд: ${best}</span>`:''}
       </div>`;
-  }
+  },
 
-  _renderZoneBar(){
-    const zoneId=CONFIG.ZONE_ORDER[this.currentZoneIndex], zone=CONFIG.ZONES[zoneId];
-    const dots=CONFIG.ZONE_ORDER.map((_,i)=>`<span class="zone-dot ${i===this.currentZoneIndex?'active':''}"></span>`).join('');
-    // Цвет панели зоны
-    const zoneColors={
-      barn:      {bg:'#6b3a1f',border:'#3d1f08',text:'#ffe0a0',nav:'#8B4513'},
-      meadow:    {bg:'#4a9a3a',border:'#2d6a20',text:'#f0ffe0',nav:'#3a8a2a'},
-      quarantine:{bg:'#3a6a8a',border:'#1a4060',text:'#e0f4ff',nav:'#2a5a7a'},
-    };
-    const c=zoneColors[zoneId]||{bg:'var(--gb2)',border:'var(--gb0)',text:'var(--gb0)',nav:'var(--gb1)'};
-    const zbar=document.getElementById('zone-bar');
-    zbar.style.background=c.bg;
-    zbar.style.borderBottomColor=c.border;
-    zbar.innerHTML=`
-      <button class="zone-nav" id="zone-prev" style="background:${c.nav};border-color:${c.border};color:${c.text}">◀</button>
+  _zonebar(){
+    const zid=CONFIG.ZONE_ORDER[this.zi], z=CONFIG.ZONES[zid];
+    const dots=CONFIG.ZONE_ORDER.map((_,i)=>`<span class="zone-dot ${i===this.zi?'active':''}"></span>`).join('');
+    const ST={barn:{bg:'#6b3010',c:'#ffe0b0',b:'#4a1e08'},meadow:{bg:'#4a8a38',c:'#e8ffe0',b:'#2a6018'},quarantine:{bg:'#3a6888',c:'#e0f0ff',b:'#1a4868'}};
+    const st=ST[zid];
+    const zb=document.getElementById('zone-bar');
+    zb.style.background=st.bg; zb.style.borderBottomColor=st.b; zb.style.color=st.c;
+    zb.innerHTML=`
+      <button class="zone-nav" id="zp" style="color:${st.c};border-color:${st.c}">◀</button>
       <div class="zone-title">
-        <span class="zone-emoji">${zone.emoji}</span>
-        <span style="color:${c.text}">${zone.name}</span>
-        <small style="color:${c.text};opacity:0.7">${cowManager.getCowsInZone(zoneId).length} COWS</small>
+        <div class="zone-title-name" style="color:${st.c}">${z.name}</div>
+        <div class="zone-title-count" style="color:${st.c}">${STATE.cowsIn(zid).length} коров</div>
       </div>
-      <button class="zone-nav" id="zone-next" style="background:${c.nav};border-color:${c.border};color:${c.text}">▶</button>
-      <div class="zone-dots">${dots}</div>`;
-    document.getElementById('zone-prev').addEventListener('click',()=>this._prevZone());
-    document.getElementById('zone-next').addEventListener('click',()=>this._nextZone());
-  }
+      <button class="zone-nav" id="zn" style="color:${st.c};border-color:${st.c}">▶</button>
+      <div class="zone-dots" style="color:${st.c}">${dots}</div>`;
+    document.getElementById('zp').onclick=()=>{this.zi=(this.zi-1+3)%3;this.render()};
+    document.getElementById('zn').onclick=()=>{this.zi=(this.zi+1)%3;this.render()};
+  },
 
-  // Уникальный фон для каждой зоны
-  _zoneBgHTML(zoneId){
-    if(zoneId==='meadow') return `
-      <div class="zone-bg zone-bg-meadow">
-        <div class="meadow-sun">☀️</div>
-        <div class="meadow-flowers">🌼🌸🌼🌸🌼🌸🌼</div>
-      </div>`;
-    if(zoneId==='barn') return `
-      <div class="zone-bg zone-bg-barn">
-        <div class="barn-lamp">🪔</div>
-        <div class="barn-window"></div>
-      </div>`;
-    if(zoneId==='quarantine') return `
-      <div class="zone-bg zone-bg-quarantine">
-        <div class="vet-cross">➕</div>
-        <div class="vet-items"><span>💉</span><span>🩺</span><span>💊</span></div>
-        <div class="vet-cabinet">📋</div>
-      </div>`;
+  _bgHTML(zid){
+    if(zid==='meadow') return`<div class="zone-bg zone-bg-meadow">
+      <div style="position:absolute;top:4%;right:8%"><svg width="30" height="30" viewBox="0 0 8 8" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="0" width="2" height="1" fill="#f0d040"/><rect x="0" y="3" width="1" height="2" fill="#f0d040"/><rect x="7" y="3" width="1" height="2" fill="#f0d040"/><rect x="3" y="7" width="2" height="1" fill="#f0d040"/><rect x="1" y="1" width="1" height="1" fill="#f0d040"/><rect x="6" y="1" width="1" height="1" fill="#f0d040"/><rect x="1" y="6" width="1" height="1" fill="#f0d040"/><rect x="6" y="6" width="1" height="1" fill="#f0d040"/><rect x="2" y="2" width="4" height="4" fill="#f8e040"/><rect x="3" y="1" width="2" height="6" fill="#f8e040"/><rect x="1" y="3" width="6" height="2" fill="#f8e040"/></svg></div>
+      <div style="position:absolute;top:7%;left:5%"><svg width="50" height="20" viewBox="0 0 13 5" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1" width="3" height="1" fill="white"/><rect x="7" y="0" width="3" height="1" fill="white"/><rect x="1" y="2" width="11" height="2" fill="white"/><rect x="0" y="3" width="13" height="1" fill="white"/></svg></div>
+      <div style="position:absolute;top:13%;right:15%"><svg width="34" height="16" viewBox="0 0 9 4" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="3" height="1" fill="white"/><rect x="1" y="1" width="7" height="2" fill="white"/><rect x="0" y="2" width="9" height="1" fill="white"/></svg></div>
+      <div style="position:absolute;bottom:12px;left:0;right:0;display:flex;gap:9px;padding:0 10px">
+        ${Array.from({length:8},()=>`<svg width="10" height="12" viewBox="0 0 3 4" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="0" width="1" height="2" fill="#e8b0bc"/><rect x="0" y="1" width="3" height="1" fill="#e898a8"/><rect x="1" y="3" width="1" height="1" fill="#6a9660"/></svg>`).join('')}
+      </div>
+    </div>`;
+    if(zid==='barn') return`<div class="zone-bg zone-bg-barn">
+      <div class="barn-win"></div><div class="barn-hay"></div>
+      <div style="position:absolute;top:5%;left:8%"><svg width="20" height="28" viewBox="0 0 5 7" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="1" height="1" fill="#c0a040"/><rect x="1" y="1" width="3" height="1" fill="#d4b840"/><rect x="0" y="2" width="5" height="3" fill="#ffe090"/><rect x="1" y="5" width="3" height="1" fill="#c0a040"/><rect x="2" y="6" width="1" height="1" fill="#a08030"/></svg></div>
+    </div>`;
+    if(zid==='quarantine') return`<div class="zone-bg zone-bg-quarantine">
+      <div class="vet-cross"></div>
+      <div style="position:absolute;top:8%;right:7%;background:#b8ccc8;border:2px solid #7a9a94;padding:5px 6px;box-shadow:2px 2px 0 #5a7a74;display:flex;flex-direction:column;gap:4px">
+        <svg width="16" height="20" viewBox="0 0 4 5" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="0" width="2" height="3" fill="#b8d8f0"/><rect x="0" y="3" width="4" height="1" fill="#8aaccc"/><rect x="1" y="1" width="2" height="1" fill="#6a8cac"/></svg>
+        <svg width="16" height="16" viewBox="0 0 4 4" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="1" width="4" height="2" fill="#d45c5c"/><rect x="1" y="0" width="2" height="4" fill="#d45c5c"/><rect x="1" y="1" width="2" height="2" fill="#f08888"/></svg>
+      </div>
+      <div style="position:absolute;top:8%;left:7%;display:flex;flex-direction:column;gap:5px">
+        <svg width="20" height="24" viewBox="0 0 5 6" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="1" height="6" fill="#a0a0b8"/><rect x="0" y="2" width="5" height="2" fill="#a0a0b8"/><rect x="1" y="1" width="3" height="4" fill="#c0c0d4"/></svg>
+        <svg width="20" height="20" viewBox="0 0 5 5" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="0" width="3" height="1" fill="#8ab8a0"/><rect x="0" y="1" width="5" height="3" fill="#a8d4bc"/><rect x="1" y="4" width="3" height="1" fill="#8ab8a0"/></svg>
+      </div>
+    </div>`;
     return '<div class="zone-bg"></div>';
-  }
+  },
 
-  // Свободное расположение коров по полю
-  _renderCowField(){
-    const zoneId=CONFIG.ZONE_ORDER[this.currentZoneIndex];
-    const cows=cowManager.getCowsInZone(zoneId);
-    const zone=CONFIG.ZONES[zoneId];
+  _field(){
+    const zid=CONFIG.ZONE_ORDER[this.zi];
+    const cows=STATE.cowsIn(zid);
     const field=document.getElementById('cow-list');
-
     if(!cows.length){
-      field.innerHTML=this._zoneBgHTML(zoneId)+`
-        <div class="empty-zone" style="position:relative;z-index:2">
-          <span class="empty-emoji">${zone.emoji}</span>
-          <p style="background:rgba(255,255,255,0.7);padding:6px 10px;border:2px solid rgba(0,0,0,0.2)">NO COWS IN ${zone.name}</p>
-        </div>`;
+      field.innerHTML=this._bgHTML(zid)+`<div class="empty-zone"><div class="empty-text">В ${CONFIG.ZONES[zid].name.toLowerCase()} нет коров</div></div>`;
       return;
     }
-
-    // Раскладываем коров по сетке, избегая перекрытий
-    const cols=2, rows=Math.ceil(cows.length/cols);
-    const cellW=100/cols, cellH=100/rows;
-
-    const cowsHTML=cows.map((cow,i)=>{
+    const cols=cows.length<=2?1:2;
+    const cw=100/cols, rws=Math.ceil(cows.length/cols), ch=100/rws;
+    const html=cows.map((c,i)=>{
       const col=i%cols, row=Math.floor(i/cols);
-      if(cow.posX===undefined) cow.posX=20+Math.floor(Math.random()*60);
-      if(cow.posY===undefined) cow.posY=15+Math.floor(Math.random()*70);
-      const left=col*cellW + (cow.posX/100)*cellW*0.6 + cellW*0.1;
-      const top=row*cellH + (cow.posY/100)*cellH*0.45 + cellH*0.05;
-
-      const noAct=cow.actionsLeft<=0;
-      const dots=Array.from({length:CONFIG.ACTIONS_PER_DAY},(_,k)=>
-        `<span class="cow-action-dot ${k<cow.actionsLeft?'active':''}"></span>`).join('');
-
-      // Стиль тела коровы зависит от зоны и здоровья
-      const sick=cow.health<30;
-      const bodyStyle=zoneId==='quarantine'
-        ? `background:#e8f4f8;border-color:#6ab04c`
-        : zoneId==='barn'
-          ? `background:#c8a46e;border-color:#5a2d00`
-          : sick ? `background:var(--gb1)` : `background:var(--gb2)`;
-      const cowEmoji=sick?'🐮':'🐄';
-
-      // Тень для читаемости поверх фона
-      const labelBg=zoneId==='meadow'?'rgba(255,255,255,0.82)':
-                    zoneId==='barn'?'rgba(50,20,0,0.78)':
-                    'rgba(20,60,100,0.75)';
-      const labelColor=zoneId==='barn'?'#ffe0a0':'#fff';
-
-      return `<div class="cow-sprite" data-cow-id="${cow.id}"
-          style="left:${left}%;top:${top}%;transform:translate(-50%,-50%)">
-        <div class="cow-actions-dots">${dots}</div>
-        <div class="cow-body" style="${bodyStyle}">${cowEmoji}</div>
-        <div class="cow-mini-bars">
-          <div class="mini-bar-track"><div class="mini-bar-fill ${cow.fullness<30?'low':''}" style="width:${cow.fullness}%"></div></div>
-          <div class="mini-bar-track"><div class="mini-bar-fill ${cow.health<30?'low':''}" style="width:${cow.health}%"></div></div>
-          <div class="mini-bar-track"><div class="mini-bar-fill ${cow.happiness<30?'low':''}" style="width:${cow.happiness}%"></div></div>
-        </div>
-        <div class="cow-label" style="background:${labelBg};color:${labelColor}">${cow.name}${noAct?' 💤':''}</div>
-      </div>`;
-    }).join('');
-
-    field.innerHTML=this._zoneBgHTML(zoneId)+cowsHTML;
-
-    field.querySelectorAll('.cow-sprite').forEach(el=>{
-      el.addEventListener('click',()=>this._openCowDetail(el.dataset.cowId));
-    });
-  }
-
-  _prevZone(){ this.currentZoneIndex=(this.currentZoneIndex-1+CONFIG.ZONE_ORDER.length)%CONFIG.ZONE_ORDER.length; this.refresh(); }
-  _nextZone(){ this.currentZoneIndex=(this.currentZoneIndex+1)%CONFIG.ZONE_ORDER.length; this.refresh(); }
-
-  _bindSwipe(){
-    document.body.addEventListener('touchstart',e=>{this.touchStartX=e.touches[0].clientX;},{passive:true});
-    document.body.addEventListener('touchend',e=>{
-      const dx=e.changedTouches[0].clientX-this.touchStartX;
-      if(Math.abs(dx)>50){ dx<0?this._nextZone():this._prevZone(); }
-    },{passive:true});
-  }
-
-  // Карточка коровы (детали + действия)
-  _openCowDetail(cowId){
-    const cow=cowManager.getCow(cowId); if(!cow) return;
-    const zoneId=CONFIG.ZONE_ORDER[this.currentZoneIndex];
-    const zone=CONFIG.ZONES[zoneId];
-    const modal=document.getElementById('modal-cow');
-    modal.classList.remove('hidden');
-
-    const noAct=cow.actionsLeft<=0;
-    const buffs=cowManager.getBuffs(cow);
-    const buffHTML=buffs.length?`<div class="buff-row">${buffs.map(b=>`<span class="buff-tag ${b.debuff?'debuff':''}">${b.label}</span>`).join('')}</div>`:'';
-
-    const inThisZone=cow.zone===zoneId;
-
-    modal.innerHTML=`
-      <div class="modal-box">
-        <div class="modal-header">
-          <span class="modal-title">🐮 ${cow.name}</span>
-          <button class="btn-close" id="close-cow">X</button>
-        </div>
-        <div class="modal-body">
-          <div class="detail-row">ZONE: <b>${CONFIG.ZONES[cow.zone]?.name}</b></div>
-          <div class="detail-row">🌽 FULLNESS: <b>${cow.fullness}/100</b></div>
-          <div class="detail-row">❤️ HEALTH: <b>${cow.health}/100</b></div>
-          <div class="detail-row">😊 HAPPY: <b>${cow.happiness}/100</b></div>
-          <div class="detail-row">🥛 MILK EST: <b>${Math.floor((cow.fullness+cow.health+cow.happiness)/CONFIG.MILK_DIVISOR)}L</b></div>
-          <div class="detail-row">⚡ ACTIONS: <b>${cow.actionsLeft}/${CONFIG.ACTIONS_PER_DAY}</b></div>
-          ${buffHTML?`<div class="detail-row" style="border:none">${buffHTML}</div>`:''}
-        </div>
-        <div class="modal-footer" style="display:flex;flex-direction:column;gap:8px">
-          ${inThisZone&&!noAct?`<button class="btn btn-action" id="btn-zone-act">${zone.actionEmoji} ${zone.action}</button>`:''}
-          ${!noAct?`<button class="btn btn-move" id="btn-move-cow">🚚 ПЕРЕМЕСТИТЬ</button>`:''}
-          <button class="btn btn-vitamins ${cow.vitaminsUsed?'disabled':''}" id="btn-vitamins" ${cow.vitaminsUsed?'disabled':''}>
-            💉 VITAMINS (${CONFIG.PRICES.VITAMINS}G)${cow.vitaminsUsed?' USED':''}
-          </button>
-        </div>
-      </div>`;
-
-    document.getElementById('close-cow').addEventListener('click',()=>modal.classList.add('hidden'));
-    document.getElementById('btn-vitamins')?.addEventListener('click',()=>{
-      const r=actionManager.buyVitamins(cowId);
-      if(r.ok){this._showNotification('💉 +10 HP!','success');this._openCowDetail(cowId);}
-      else this._showNotification('! '+r.reason,'warning');
-    });
-    document.getElementById('btn-zone-act')?.addEventListener('click',()=>{
-      const r=actionManager.doZoneAction(cowId,zoneId);
-      modal.classList.add('hidden');
-      if(!r.ok) this._showNotification('! '+r.reason,'warning');
-    });
-    document.getElementById('btn-move-cow')?.addEventListener('click',()=>{
-      modal.classList.add('hidden');
-      this._openMoveModal(cowId);
-    });
-  }
-
-  _openMoveModal(cowId){
-    const cow=cowManager.getCow(cowId); if(!cow) return;
-    const modal=document.getElementById('modal-move');
-    modal.classList.remove('hidden');
-    const zones=CONFIG.ZONE_ORDER.filter(z=>z!==cow.zone).map(zId=>{
-      const z=CONFIG.ZONES[zId];
-      return `<button class="btn btn-zone-pick" data-zone="${zId}">${z.emoji} ${z.name}</button>`;
-    }).join('');
-    modal.innerHTML=`
-      <div class="modal-box">
-        <div class="modal-header">
-          <span class="modal-title">MOVE ${cow.name}</span>
-          <button class="btn-close" id="close-move">X</button>
-        </div>
-        <div class="modal-body move-zones">${zones}</div>
-      </div>`;
-    document.getElementById('close-move').addEventListener('click',()=>modal.classList.add('hidden'));
-    modal.querySelectorAll('.btn-zone-pick').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const r=actionManager.moveCow(cowId,btn.dataset.zone);
-        modal.classList.add('hidden');
-        if(r.ok) this._showNotification(`MOVED TO ${CONFIG.ZONES[btn.dataset.zone].name}`,'success');
-        else this._showNotification('! '+r.reason,'warning');
-      });
-    });
-  }
-
-  // Отчёт по дойке
-  _openMilkReport(data){
-    const modal=document.getElementById('modal-milk');
-    modal.classList.remove('hidden');
-    const rows=data.rows.map(r=>`
-      <div class="milk-report-row">
-        <span class="cow-name-r">${r.name}</span>
-        <span class="cow-calc">${r.milk}L × ${data.price}G = <b>${Math.floor(r.milk*data.price)}G</b></span>
-      </div>`).join('');
-    const deadHTML=data.dead?.length?`<div style="color:#f99;font-size:7px;margin-top:8px;border-top:2px solid var(--gb1);padding-top:8px">RIP: ${data.dead.map(c=>c.name).join(', ')}</div>`:'';
-    modal.innerHTML=`
-      <div class="modal-box">
-        <div class="modal-header">
-          <span class="modal-title">🥛 ДОЙКА — DAY ${data.day}</span>
-        </div>
-        <div class="modal-body">
-          ${rows}
-          <div class="milk-report-total">
-            ИТОГО: ${data.totalMilk}L × ${data.price}G = <b>${data.earned}G</b>
+      const left=col*cw+(c.posX/100)*cw*0.5+cw*0.15;
+      const top=row*ch+(c.posY/100)*ch*0.42+ch*0.08;
+      const p=PALETTES[c.pal%PALETTES.length];
+      const dots=Array.from({length:CONFIG.ACTIONS_PER_DAY},(_,k)=>`<span class="cow-dot ${k<c.actionsLeft?'on':''}"></span>`).join('');
+      const danger=c.health<30||c.fullness<20;
+      const milk=STATE.milkOf(c), pot=STATE.milkPotential(c);
+      // потенциал как % на шкале (отображаем сколько используется от max)
+      const potPct=Math.round((1-milk/Math.max(1,pot))*100);
+      return`<div class="cow-sprite ${danger?'cow-danger':''}" data-id="${c.id}" style="left:${left}%;top:${top}%">
+        <div class="cow-dot-row">${dots}</div>
+        ${cowSVG(p,84)}
+        <div class="cow-name-tag" style="background:${p.body};color:${p.spot};border-color:${p.spot}">${c.name}${c.actionsLeft===0?' zzz':''}</div>
+        <div class="cow-bars-mini">
+          <div class="mini-row"><svg class="mini-ico" viewBox="0 0 10 9" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="0" width="3" height="1" fill="#d45c5c"/><rect x="6" y="0" width="3" height="1" fill="#d45c5c"/><rect x="0" y="1" width="4" height="2" fill="#d45c5c"/><rect x="5" y="1" width="5" height="2" fill="#d45c5c"/><rect x="0" y="3" width="10" height="2" fill="#d45c5c"/><rect x="1" y="5" width="8" height="2" fill="#d45c5c"/><rect x="2" y="7" width="6" height="1" fill="#d45c5c"/><rect x="4" y="8" width="2" height="1" fill="#d45c5c"/></svg><div class="mini-track"><div class="mini-fill mf-hp ${c.health<30?'mf-low':''}" style="width:${c.health}%"></div></div></div>
+          <div class="mini-row"><svg class="mini-ico" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="6" height="1" fill="#9b8bc8"/><rect x="0" y="2" width="1" height="6" fill="#9b8bc8"/><rect x="9" y="2" width="1" height="6" fill="#9b8bc8"/><rect x="3" y="3" width="1" height="1" fill="#3a2518"/><rect x="6" y="3" width="1" height="1" fill="#3a2518"/><rect x="2" y="6" width="1" height="1" fill="#3a2518"/><rect x="7" y="6" width="1" height="1" fill="#3a2518"/><rect x="3" y="7" width="4" height="1" fill="#3a2518"/><rect x="2" y="9" width="6" height="1" fill="#9b8bc8"/></svg><div class="mini-track"><div class="mini-fill mf-hap ${c.happiness<30?'mf-low':''}" style="width:${c.happiness}%"></div></div></div>
+          <div class="mini-row"><svg class="mini-ico" viewBox="0 0 10 12" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="0" width="2" height="2" fill="#d4a843"/><rect x="2" y="2" width="2" height="2" fill="#d4a843"/><rect x="6" y="2" width="2" height="2" fill="#d4a843"/><rect x="3" y="4" width="4" height="2" fill="#d4a843"/><rect x="4" y="6" width="2" height="6" fill="#8b6a2a"/></svg><div class="mini-track"><div class="mini-fill mf-ful ${c.fullness<30?'mf-low':''}" style="width:${c.fullness}%"></div></div></div>
+          <div class="mini-row" style="margin-top:1px">
+            <svg class="mini-ico" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="0" width="4" height="2" fill="#7ab8d8"/><rect x="1" y="2" width="8" height="5" fill="#a8d4ec"/><rect x="0" y="3" width="10" height="3" fill="#a8d4ec"/><rect x="2" y="7" width="6" height="2" fill="#7ab8d8"/><rect x="4" y="4" width="2" height="2" fill="#5898c0"/></svg>
+            <div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,Math.round(milk/Math.max(1,pot)*100))}%;background:var(--sky2)"></div><div class="milk-pot-bar" style="width:${Math.min(100,potPct)}%"></div></div>
+            <span style="font-size:7px;color:var(--text);font-weight:bold;width:28px;text-align:right">${milk}л</span>
           </div>
-          ${deadHTML}
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-ok" id="btn-milk-ok">▶ ПРОДОЛЖИТЬ</button>
         </div>
       </div>`;
-    document.getElementById('btn-milk-ok').addEventListener('click',()=>{
-      modal.classList.add('hidden');
-      // Теперь запускаем новый день
-      actionManager._startNewDay();
-    });
-  }
+    }).join('');
+    field.innerHTML=this._bgHTML(zid)+html;
+    field.querySelectorAll('.cow-sprite').forEach(el=>el.onclick=()=>this._detail(el.dataset.id));
+  },
 
-  _openShop(){
-    const modal=document.getElementById('modal-shop');
-    modal.classList.remove('hidden');
-    const e=economyManager;
-    modal.innerHTML=`
-      <div class="modal-box">
-        <div class="modal-header">
-          <span class="modal-title">🏪 SHOP</span>
-          <button class="btn-close" id="close-shop">X</button>
+  _detail(cowId){
+    const c=STATE.cow(cowId); if(!c) return;
+    const zid=CONFIG.ZONE_ORDER[this.zi], z=CONFIG.ZONES[zid];
+    const m=document.getElementById('m-cow'); m.classList.remove('hidden');
+    const p=PALETTES[c.pal%PALETTES.length];
+    const breed=TRAITS.BREEDS.find(b=>b.id===c.breed)||TRAITS.BREEDS[0];
+    const pers=TRAITS.PERSONALITIES.find(p=>p.id===c.pers)||TRAITS.PERSONALITIES[0];
+    const buffs=STATE.getBuffs(c);
+    const pot=STATE.milkPotential(c); const milk=STATE.milkOf(c);
+    const noAct=c.actionsLeft<=0, inZ=c.zone===zid;
+    const unusedPct=Math.max(0,100-Math.round(milk/Math.max(1,pot)*100));
+
+    m.innerHTML=`<div class="modal-box">
+      <div class="modal-hd"><span class="modal-title">${c.name}</span><button class="btn-close" id="cc">×</button></div>
+      <div class="modal-body">
+        <div class="cow-info-grid">
+          ${cowSVG(p,64)}
+          <div class="cow-info-text">
+            <b>${breed.name}</b> · ${pers.name}<br>
+            Зона: <b>${CONFIG.ZONES[c.zone].name}</b><br>
+            Действий: <b>${c.actionsLeft}/${CONFIG.ACTIONS_PER_DAY}</b><br>
+            Возраст: <b>${c.age} дн.</b><br>
+            Удой сейчас: <b>${milk} л</b><br>
+            Потенциал: <b>${pot} л</b> (ур.${c.milkLevel}/5)
+          </div>
         </div>
-        <div class="modal-body shop-grid">
-          <div class="shop-item"><div class="shop-icon">🐮</div><div class="shop-info"><b>BUY COW</b><small>STATS 50/50/50</small></div><button class="btn btn-buy" data-action="cow">${CONFIG.PRICES.COW}G</button></div>
-          <div class="shop-item"><div class="shop-icon">🌾</div><div class="shop-info"><b>FEED ×${CONFIG.PRICES.FEED_AMOUNT}</b><small>FOR BARN</small></div><button class="btn btn-buy" data-action="feed">${CONFIG.PRICES.FEED_PACK}G</button></div>
-          <div class="shop-item"><div class="shop-icon">💊</div><div class="shop-info"><b>MEDS ×${CONFIG.PRICES.MED_AMOUNT}</b><small>FOR QUARANTINE</small></div><button class="btn btn-buy" data-action="medicine">${CONFIG.PRICES.MED_PACK}G</button></div>
-          <div class="shop-item"><div class="shop-icon">🚰</div><div class="shop-info"><b>WATERER</b><small>+${CONFIG.WATERER_HAPPINESS_BONUS} HAPPY/DAY</small></div><button class="btn btn-buy ${e.upgrades.waterer?'disabled':''}" data-action="waterer" ${e.upgrades.waterer?'disabled':''}>${e.upgrades.waterer?'OWNED':CONFIG.PRICES.WATERER+'G'}</button></div>
+        <div class="sbar-row sb-hp"><span class="sbar-lbl">Здоровье</span><div class="sbar-track"><div class="sbar-fill" style="width:${c.health}%"></div></div><span class="sbar-val">${c.health}</span></div>
+        <div class="sbar-row sb-hap"><span class="sbar-lbl">Счастье</span><div class="sbar-track"><div class="sbar-fill" style="width:${c.happiness}%"></div></div><span class="sbar-val">${c.happiness}</span></div>
+        <div class="sbar-row sb-ful"><span class="sbar-lbl">Сытость</span><div class="sbar-track"><div class="sbar-fill" style="width:${c.fullness}%"></div></div><span class="sbar-val">${c.fullness}</span></div>
+        <div class="sbar-row sb-milk">
+          <span class="sbar-lbl">Удой / макс</span>
+          <div class="sbar-track">
+            <div class="sbar-fill" style="width:${Math.round(milk/Math.max(1,pot)*100)}%"></div>
+            <div class="sbar-pot" style="width:${unusedPct}%"></div>
+          </div>
+          <span class="sbar-val">${milk}/${pot}</span>
         </div>
-        <div class="shop-balance">GOLD: <b>${e.gold}</b></div>
-      </div>`;
-    document.getElementById('close-shop').addEventListener('click',()=>modal.classList.add('hidden'));
-    modal.querySelectorAll('.btn-buy').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const a=btn.dataset.action;
-        const r=a==='cow'?actionManager.buyCow():a==='feed'?actionManager.buyFeed():
-                a==='medicine'?actionManager.buyMedicine():actionManager.buyWaterer();
-        if(r?.ok){this._showNotification({cow:'🐮',feed:'🌾',medicine:'💊',waterer:'🚰'}[a]+' BOUGHT!','success');this._openShop();}
-        else this._showNotification('! '+(r?.reason||'ERROR'),'warning');
-      });
+        ${buffs.length?`<div class="buff-row">${buffs.map(b=>`<span class="buff-tag ${b.debuff?'debuff':''}">${b.label}</span>`).join('')}</div>`:''}
+      </div>
+      <div class="modal-foot" style="display:flex;flex-direction:column;gap:7px">
+        ${inZ&&!noAct?`<button class="btn btn-action" id="bza">${z.action}</button>`:''}
+        ${!noAct?`<button class="btn btn-move" id="bmv">Перевести в другую зону</button>`:''}
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-vit ${c.vitaminsUsed?'disabled':''}" id="bvit" ${c.vitaminsUsed?'disabled':''} style="flex:1;font-size:9px">Витамины<br><small>${CONFIG.PRICES.VITAMINS}з · +15 HP</small></button>
+          <button class="btn btn-vit ${c.tonicUsed?'disabled':''}" id="btonic" ${c.tonicUsed?'disabled':''} style="flex:1;font-size:9px;background:var(--lavender)">Тоник<br><small>${CONFIG.PRICES.TONIC}з · +20 ☺</small></button>
+        </div>
+        <button class="btn ${c.milkLevel>=5?'disabled':''}" id="bbreed" ${c.milkLevel>=5?'disabled':''} style="background:var(--mint);color:var(--brown);font-size:9px;width:100%;padding:10px">
+          Улучшить удой (ур.${c.milkLevel}→${Math.min(5,c.milkLevel+1)}) · ${CONFIG.PRICES.BREEDING}з · потенциал +${Math.round((breed.milkMax-breed.milkBase)/5)} л
+        </button>
+      </div>
+    </div>`;
+    document.getElementById('cc').onclick=()=>m.classList.add('hidden');
+    document.getElementById('bza')?.onclick=()=>{ const r=STATE.doAction(cowId,zid); if(r.ok)this._detail(cowId); else this._notif(r.reason,'warning'); };
+    document.getElementById('bmv')?.onclick=()=>{ m.classList.add('hidden'); this._moveModal(cowId); };
+    document.getElementById('bvit')?.onclick=()=>{ const r=STATE.useVitamins(cowId); if(r.ok){this._notif('+15 здоровья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+    document.getElementById('btonic')?.onclick=()=>{ const r=STATE.useTonic(cowId); if(r.ok){this._notif('+20 счастья!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+    document.getElementById('bbreed')?.onclick=()=>{ const r=STATE.buyBreeding(cowId); if(r.ok){this._notif('Потенциал вырос!','success');this._detail(cowId);}else this._notif(r.reason,'warning'); };
+  },
+
+  _moveModal(cowId){
+    const c=STATE.cow(cowId); if(!c) return;
+    const m=document.getElementById('m-move'); m.classList.remove('hidden');
+    const zones=CONFIG.ZONE_ORDER.filter(z=>z!==c.zone).map(zid=>`<button class="btn btn-zpick" data-z="${zid}">${CONFIG.ZONES[zid].name}</button>`).join('');
+    m.innerHTML=`<div class="modal-box">
+      <div class="modal-hd"><span class="modal-title">Перевести ${c.name}</span><button class="btn-close" id="cm">×</button></div>
+      <div class="modal-body move-zones">${zones}</div>
+    </div>`;
+    document.getElementById('cm').onclick=()=>m.classList.add('hidden');
+    m.querySelectorAll('.btn-zpick').forEach(btn=>btn.onclick=()=>{
+      const r=STATE.moveCow(cowId,btn.dataset.z); m.classList.add('hidden');
+      if(r.ok) this._notif(`${c.name} переведена`,'success'); else this._notif(r.reason,'warning');
     });
-  }
+  },
 
-  _showNotification(msg,type='info'){
-    const area=document.getElementById('notification-area');
-    const el=document.createElement('div');
-    el.className=`notification notification-${type}`;
-    el.textContent=msg;
-    area.appendChild(el);
-    setTimeout(()=>el.classList.add('show'),10);
-    setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),300);},3500);
-  }
+  _shop(tab='supplies'){
+    const m=document.getElementById('m-shop'); m.classList.remove('hidden');
+    const s=STATE, sn=s.season;
+    const feedPrice=Math.round(CONFIG.PRICES.FEED_PACK*sn.feedPriceMult);
+    const barnCost=CONFIG.PRICES.BARN_UPGRADE*(s.upgrades.barnUpgrade+1);
+    const ICO_FEED=`<svg width="36" height="36" viewBox="0 0 10 12" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="0" width="2" height="2" fill="#d4a843"/><rect x="2" y="2" width="2" height="2" fill="#d4a843"/><rect x="6" y="2" width="2" height="2" fill="#d4a843"/><rect x="3" y="4" width="4" height="2" fill="#d4a843"/><rect x="4" y="6" width="2" height="6" fill="#8b6a2a"/></svg>`;
+    const ICO_MED=`<svg width="36" height="36" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="3" width="10" height="4" fill="#d45c5c"/><rect x="3" y="0" width="4" height="10" fill="#d45c5c"/><rect x="1" y="4" width="8" height="2" fill="#f08888"/><rect x="4" y="1" width="2" height="8" fill="#f08888"/></svg>`;
+    const ICO_WATER=`<svg width="36" height="36" viewBox="0 0 9 9" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="0" width="3" height="2" fill="#7ab8d8"/><rect x="1" y="2" width="7" height="5" fill="#a8d4ec"/><rect x="0" y="3" width="9" height="3" fill="#a8d4ec"/><rect x="2" y="7" width="5" height="2" fill="#7ab8d8"/><rect x="3" y="4" width="3" height="1" fill="#5898c0"/></svg>`;
+    const ICO_BARN=`<svg width="36" height="36" viewBox="0 0 9 9" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="0" width="7" height="1" fill="#8b5e3c"/><rect x="0" y="1" width="9" height="7" fill="#c49a6c"/><rect x="3" y="4" width="3" height="4" fill="#8b5e3c"/><rect x="1" y="2" width="2" height="2" fill="#ffe090"/><rect x="6" y="2" width="2" height="2" fill="#ffe090"/></svg>`;
+    const ICO_PASTURE=`<svg width="36" height="36" viewBox="0 0 10 8" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="5" width="10" height="3" fill="#6b9660"/><rect x="1" y="3" width="2" height="3" fill="#8fad7f"/><rect x="4" y="2" width="2" height="4" fill="#8fad7f"/><rect x="7" y="3" width="2" height="3" fill="#8fad7f"/><rect x="2" y="1" width="1" height="2" fill="#a8c898"/><rect x="5" y="0" width="1" height="2" fill="#a8c898"/><rect x="8" y="1" width="1" height="2" fill="#a8c898"/></svg>`;
+    const rndPal=PALETTES[Math.floor(Math.random()*PALETTES.length)];
 
-  _bindEvents(){
-    GameBus.on(EVENTS.UI_REFRESH,()=>this.refresh());
-    GameBus.on(EVENTS.NOTIFICATION,(msg,type)=>this._showNotification(msg,type));
-    GameBus.on(EVENTS.COW_DIED,cow=>this._showNotification(`💀 RIP ${cow.name}`,'danger'));
-    GameBus.on(EVENTS.MILK_REPORT,data=>this._openMilkReport(data));
-  }
-}
-window.uiManager = new UIManager();
+    const tabs=['supplies','farm','cows'];
+    const tabLabels=['Расходники','Улучшения','Коровы'];
+    const tabsHTML=tabs.map((t,i)=>`<button class="shop-tab ${t===tab?'active':''}" data-t="${t}">${tabLabels[i]}</button>`).join('');
 
-// ============================================================
-// main
-// ============================================================
-function initGame(){
-  const saved=saveManager.load();
-  if(saved){
-    economyManager.load(saved.economy);
-    cowManager.load(saved.cows);
-    actionManager.load(saved.action);
-  } else {
-    for(let i=0;i<CONFIG.START_COWS;i++){
-      const name=cowManager._randomName(), s=CONFIG.COW_START_STATS;
-      const cow={
-        id:`cow_start_${i}`,name,zone:'barn',
-        fullness:s.fullness,health:s.health,happiness:s.happiness,
-        milkAmount:0,actionsLeft:CONFIG.ACTIONS_PER_DAY,vitaminsUsed:false,
-        posX:20+Math.floor(Math.random()*60),
-        posY:15+Math.floor(Math.random()*70),
-      };
-      cowManager.cows.push(cow); cowManager._usedNames.add(name);
+    let bodyHTML='';
+    if(tab==='supplies'){
+      bodyHTML=`
+        ${this._shopItem(ICO_FEED,`Корм × ${CONFIG.PRICES.FEED_AMOUNT}`,`Сейчас: ${feedPrice} з (×${sn.feedPriceMult.toFixed(1)} сезон)`,'feed',feedPrice)}
+        ${this._shopItem(ICO_MED,`Лекарства × ${CONFIG.PRICES.MED_AMOUNT}`,'Лечение в Карантине','medicine',CONFIG.PRICES.MED_PACK)}
+        ${this._shopItem(`<svg width="36" height="36" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="3" width="10" height="4" fill="#d45c5c"/><rect x="3" y="0" width="4" height="10" fill="#d45c5c"/><rect x="1" y="4" width="8" height="2" fill="#f08888"/><rect x="4" y="1" width="2" height="8" fill="#f08888"/></svg>`,'Витамины (разовые)',`+15 здоровья одной корове`,'vitamins_item',CONFIG.PRICES.VITAMINS)}
+        ${this._shopItem(`<svg width="36" height="36" viewBox="0 0 10 10" style="image-rendering:pixelated" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="0" width="6" height="1" fill="#c9b8e8"/><rect x="0" y="1" width="10" height="7" fill="#c9b8e8"/><rect x="2" y="8" width="6" height="1" fill="#c9b8e8"/><rect x="4" y="3" width="2" height="3" fill="#9b8bc8"/><rect x="3" y="4" width="4" height="1" fill="#9b8bc8"/></svg>`,'Тоник (разовый)',`+20 счастья одной корове`,'tonic_item',CONFIG.PRICES.TONIC)}
+      `;
+    } else if(tab==='farm'){
+      bodyHTML=`
+        ${this._shopItem(ICO_WATER,'Автопоилка',`+${CONFIG.WATERER_BONUS} счастья всем каждый день`,'waterer',CONFIG.PRICES.WATERER, s.upgrades.waterer)}
+        ${s.upgrades.barnUpgrade<3 ? this._shopItem(ICO_BARN,`Амбар ур.${s.upgrades.barnUpgrade+1}`,`Кормление +2 сытости за действие`,`barn`,barnCost, false) : this._shopItem(ICO_BARN,'Амбар (макс)','Полностью улучшен','barn',0,true)}
+        ${this._shopItem(ICO_PASTURE,'Улучшить луг',`Прогулки дают +3 счастья`,'pasture',CONFIG.PRICES.PASTURE, s.upgrades.pasture)}
+      `;
+    } else if(tab==='cows'){
+      bodyHTML=`
+        ${this._shopItem(cowSVG(rndPal,36),'Купить корову',`Случайная порода · ${CONFIG.PRICES.COW_BASE} з`,'cow',CONFIG.PRICES.COW_BASE)}
+        ${TRAITS.BREEDS.map(b=>
+          this._shopItem(cowSVG(PALETTES[Math.floor(Math.random()*PALETTES.length)],36),
+            b.name, `Молоко ${b.milkBase}–${b.milkMax}л · корм ×${b.feedNeed}`, `breed_${b.id}`,
+            Math.round(CONFIG.PRICES.COW_BASE*b.feedNeed))
+        ).join('')}
+      `;
     }
+
+    m.innerHTML=`<div class="modal-box">
+      <div class="modal-hd"><span class="modal-title">Магазин</span><button class="btn-close" id="cs">×</button></div>
+      <div class="modal-body">
+        <div class="shop-tabs">${tabsHTML}</div>
+        <div class="shop-grid" id="shop-body">${bodyHTML}</div>
+      </div>
+      <div class="shop-bal">Золото: <b>${s.gold} з</b> · Корм: <b>${s.feed}</b> · Лекарства: <b>${s.medicine}</b></div>
+    </div>`;
+    document.getElementById('cs').onclick=()=>m.classList.add('hidden');
+    m.querySelectorAll('.shop-tab').forEach(btn=>btn.onclick=()=>this._shop(btn.dataset.t));
+    m.querySelectorAll('.btn-buy,.btn-upgrade').forEach(btn=>btn.onclick=()=>{
+      const a=btn.dataset.act;
+      let r;
+      if(a==='vitamins_item'||a==='tonic_item'){
+        // Расходники — открыть выбор коровы
+        m.classList.add('hidden');
+        this._pickCowForItem(a==='vitamins_item'?'vitamins':'tonic');
+        return;
+      }
+      if(a.startsWith('breed_')){
+        const bid=a.replace('breed_','');
+        if(STATE.gold<Math.round(CONFIG.PRICES.COW_BASE*TRAITS.BREEDS.find(b=>b.id===bid).feedNeed))
+          r={ok:false,reason:'Не хватает золота'};
+        else{
+          STATE.gold-=Math.round(CONFIG.PRICES.COW_BASE*TRAITS.BREEDS.find(b=>b.id===bid).feedNeed);
+          STATE.makeCow('barn',bid); r={ok:true};
+        }
+      } else {
+        r=STATE.buy(a);
+      }
+      if(r?.ok){ this._notif('Куплено!','success'); this._shop(tab); }
+      else this._notif(r?.reason||'Ошибка','warning');
+    });
+  },
+
+  _shopItem(ico,name,desc,act,price,disabled=false){
+    return`<div class="shop-item">
+      <div class="shop-ico">${ico}</div>
+      <div class="shop-info"><b>${name}</b><small>${desc}</small></div>
+      <button class="btn ${disabled?'btn-buy disabled':'btn-buy'}" data-act="${act}" ${disabled?'disabled':''}>${disabled?'Куплено':price+' з'}</button>
+    </div>`;
+  },
+
+  _pickCowForItem(itemType){
+    if(!STATE.cows.length){ this._notif('Нет коров','warning'); return; }
+    const m=document.getElementById('m-move'); m.classList.remove('hidden');
+    const label=itemType==='vitamins'?'Витамины (+15 HP)':'Тоник (+20 ☺)';
+    const list=STATE.cows.map(c=>`<button class="btn btn-zpick" data-cid="${c.id}">${c.name} (HP:${c.health})</button>`).join('');
+    m.innerHTML=`<div class="modal-box">
+      <div class="modal-hd"><span class="modal-title">${label} — выберите корову</span><button class="btn-close" id="cm2">×</button></div>
+      <div class="modal-body move-zones">${list}</div>
+    </div>`;
+    document.getElementById('cm2').onclick=()=>m.classList.add('hidden');
+    m.querySelectorAll('.btn-zpick').forEach(btn=>btn.onclick=()=>{
+      const r=itemType==='vitamins'?STATE.useVitamins(btn.dataset.cid):STATE.useTonic(btn.dataset.cid);
+      m.classList.add('hidden');
+      if(r.ok) this._notif('Применено!','success'); else this._notif(r.reason,'warning');
+    });
+  },
+
+  _milkReport(data){
+    // Анимация перехода
+    const overlay=document.getElementById('day-overlay');
+    const sn=data.seasonChanged ? data.newSeason : STATE.season;
+    overlay.innerHTML=`<div class="day-card">
+      <div class="day-card-title">День ${data.day} завершён</div>
+      <div class="day-card-season">${sn.icon}</div>
+      ${data.seasonChanged?`<div style="font-size:12px;font-weight:bold;color:var(--brown);margin-bottom:8px">Наступает ${data.newSeason.name}!</div>`:''}
+      <div class="day-card-info">
+        Надоено: <b>${data.totalMilk} л</b><br>
+        Цена: <b>${data.price} з/л</b><br>
+        Выручка: <b>+${data.earned} з</b><br>
+        ${data.eventMsg?`<span style="color:${data.eventGood?'#5a8a50':'#c04040'}">${data.eventMsg}</span>`:''}
+      </div>
+    </div>`;
+    overlay.classList.add('show');
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      setTimeout(()=>this._showFullReport(data), 350);
+    }, data.seasonChanged ? 2200 : 1600);
+  },
+
+  _showFullReport(data){
+    const m=document.getElementById('m-milk'); m.classList.remove('hidden');
+    const rows=data.rows.map(r=>`<div class="mr-row">
+      <span class="mr-name">${r.name}</span>
+      <span class="mr-calc">${r.milk} л · потенциал ${r.pot} л · = <b>${Math.floor(r.milk*data.price)} з</b></span>
+    </div>`).join('');
+    const deadH=data.dead?.length?`<div style="color:var(--red);font-size:9px;margin-top:10px;padding-top:10px;border-top:2px solid var(--sand)">Погибли: ${data.dead.map(c=>c.name).join(', ')}</div>`:'';
+    const seasonH=data.seasonChanged?`<div style="background:${data.newSeason.color};padding:10px;margin-bottom:10px;border:2px solid var(--brown2);font-size:10px;font-weight:bold;color:var(--brown)">
+      ${data.newSeason.icon} Наступает ${data.newSeason.name}!<br>
+      <span style="font-size:8px;font-weight:normal">${this._seasonTip(data.newSeason)}</span>
+    </div>`:'';
+    m.innerHTML=`<div class="modal-box">
+      <div class="modal-hd"><span class="modal-title">Итоги — День ${data.day}</span></div>
+      <div class="modal-body">${seasonH}${rows}
+        <div class="mr-total">Итого: ${data.totalMilk} л × ${data.price} з = <b>${data.earned} з</b></div>
+        ${deadH}
+      </div>
+      <div class="modal-foot"><button class="btn btn-ok" id="bok">Новый день</button></div>
+    </div>`;
+    document.getElementById('bok').onclick=()=>{
+      m.classList.add('hidden');
+      if(STATE.cows.length===0){ this._gameOver(); return; }
+      STATE.afterReport();
+    };
+  },
+
+  _seasonTip(sn){
+    const tips={
+      spring:'Корм дешевле, коровы лучше едят. Хорошее время для расширения!',
+      summer:'Молоко дороже всего, но жара повышает аппетит коров.',
+      autumn:'Цены на корм растут. Делайте запасы!',
+      winter:'Тяжёлое время: молоко дешевле, коровы слабее. Держитесь!',
+    };
+    return tips[sn.id]||'';
+  },
+
+  _gameOver(){
+    const d=STATE.day;
+    const prev=parseInt(localStorage.getItem('farm_best')||'0');
+    const best=Math.max(prev,d);
+    localStorage.setItem('farm_best',best);
+    const go=document.getElementById('gameover'); go.classList.remove('hidden');
+    go.innerHTML=`<div class="go-box">
+      <div class="go-title">Ферма опустела</div>
+      <div class="go-sub">Все коровы погибли...<br>Но вы можете начать заново!</div>
+      <div class="go-stat">Прожито дней: <b>${d}</b><br>Рекорд: <b>${best} дн.</b><br>Сезонов: <b>${Math.floor(d/CONFIG.DAYS_PER_SEASON)}</b></div>
+      <button class="btn-restart" id="restart">Начать заново</button>
+    </div>`;
+    document.getElementById('restart').onclick=()=>{ clearState(); location.reload(); };
+  },
+
+  _notif(msg,type='info'){
+    const a=document.getElementById('notif-area');
+    const el=document.createElement('div'); el.className=`notif notif-${type}`; el.textContent=msg;
+    a.appendChild(el); setTimeout(()=>el.classList.add('show'),10);
+    setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); }, 3400);
+  },
+
+  _swipe(){
+    document.body.addEventListener('touchstart',e=>{this.tx=e.touches[0].clientX},{passive:true});
+    document.body.addEventListener('touchend',e=>{
+      const dx=e.changedTouches[0].clientX-this.tx;
+      if(Math.abs(dx)>50){ dx<0?this.zi=(this.zi+1)%3:this.zi=(this.zi-1+3)%3; this.render(); }
+    },{passive:true});
+  },
+};
+window.UI=UI;
+
+// ═══════════════════════════════════════════════════════
+// СТАРТ
+// ═══════════════════════════════════════════════════════
+function initGame(){
+  const saved=loadState();
+  if(!saved||!STATE.load(saved)){
+    for(let i=0;i<CONFIG.START_COWS;i++) STATE.makeCow('barn');
   }
-  uiManager.init();
-  saveManager.bindAutoSave();
+  UI.init();
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/cowgame/sw.js').catch(()=>{});
   setTimeout(()=>{
-    const splash=document.getElementById('splash');
-    if(splash){splash.classList.add('hidden');setTimeout(()=>splash.remove(),300);}
-  },900);
+    const s=document.getElementById('splash');
+    if(s){ s.classList.add('hidden'); setTimeout(()=>s.remove(),350); }
+  }, 900);
 }
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/cowgame/sw.js').catch(()=>{});
-}
-
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initGame);
 else initGame();
 </script>
